@@ -1,0 +1,9 @@
+# Trellis-managed Python support code should not affect GitHub Linguist stats.
+.trellis/scripts/*.py linguist-generated=true
+.trellis/scripts/**/*.py linguist-generated=true
+.claude/hooks/*.py linguist-generated=true
+.claude/hooks/**/*.py linguist-generated=true
+.codex/hooks/*.py linguist-generated=true
+.codex/hooks/**/*.py linguist-generated=true
+.cursor/hooks/*.py linguist-generated=true
+.cursor/hooks/**/*.py linguist-generated=true
