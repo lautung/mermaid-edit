@@ -38,3 +38,36 @@ Built and published a Vite React Mermaid online editor with live preview, SVG/PN
 ### Next Steps
 
 - None - task complete
+
+
+## Session 2: Mark Trellis Python as generated
+
+**Date**: 2026-07-02
+**Task**: Mark Trellis Python as generated
+**Branch**: `main`
+
+### Summary
+
+Added .gitattributes rules so Trellis scripts and platform hook Python files are marked as generated for GitHub Linguist without excluding all Python files.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `67a68c8` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
