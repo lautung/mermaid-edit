@@ -1,3 +1,5 @@
+import { Badge, Space, Tag, Typography } from "antd";
+import { LockOutlined } from "@ant-design/icons";
 import type { RenderState } from "../types";
 
 type StatusBarProps = {
@@ -7,13 +9,25 @@ type StatusBarProps = {
 };
 
 export function StatusBar({ renderState, sourceLength, zoom }: StatusBarProps) {
+  const badgeStatus =
+    renderState.status === "ready"
+      ? "success"
+      : renderState.status === "error"
+        ? "error"
+        : renderState.status === "rendering"
+          ? "processing"
+          : "default";
+
   return (
     <footer className="statusBar">
-      <span className={`statusDot ${renderState.status}`} />
-      <span>{renderState.message}</span>
-      <span>{sourceLength} 字符</span>
-      <span>预览缩放 {zoom}%</span>
-      <span>全部在浏览器本地渲染和导出</span>
+      <Space size={18} wrap>
+        <Badge status={badgeStatus} text={renderState.message} />
+        <Typography.Text type="secondary">{sourceLength} 字符</Typography.Text>
+        <Typography.Text type="secondary">预览缩放 {zoom}%</Typography.Text>
+      </Space>
+      <Tag icon={<LockOutlined />} color="default">
+        所有处理在浏览器本地完成，不会上传数据
+      </Tag>
     </footer>
   );
 }

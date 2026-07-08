@@ -15,15 +15,17 @@ export async function downloadRaster(
   svg: string,
   format: Extract<ExportFormat, "png" | "jpg">,
   scale: number,
+  options: { filename?: string; transparentBackground?: boolean } = {},
 ) {
   const mimeType = format === "png" ? "image/png" : "image/jpeg";
   const blob = await svgToRasterBlob(svg, {
     scale,
     mimeType,
-    background: format === "png" ? "transparent" : "#ffffff",
+    background:
+      format === "png" && options.transparentBackground ? "transparent" : "#ffffff",
   });
 
-  downloadBlob(blob, `diagram.${format}`);
+  downloadBlob(blob, `${sanitizeFilename(options.filename) ?? "diagram"}.${format}`);
 }
 
 export async function copySvg(svg: string) {
@@ -39,6 +41,18 @@ function downloadBlob(blob: Blob, filename: string) {
   link.click();
   link.remove();
   URL.revokeObjectURL(url);
+}
+
+function sanitizeFilename(filename?: string) {
+  const trimmed = filename?.trim();
+  if (!trimmed) {
+    return null;
+  }
+
+  const invalidChars = new Set(['<', '>', ':', '"', '/', "\\", '|', '?', '*']);
+  return Array.from(trimmed, (char) =>
+    invalidChars.has(char) || char.charCodeAt(0) < 32 ? "-" : char,
+  ).join("");
 }
 
 async function svgToRasterBlob(svg: string, options: RasterOptions) {

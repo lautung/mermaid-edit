@@ -1,45 +1,79 @@
+import { Alert, Badge, Empty, Spin, Tabs } from "antd";
+import { EyeOutlined, WarningOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
 import type { RenderState } from "../types";
 
 type PreviewPaneProps = {
   svg: string;
   state: RenderState;
   zoom: number;
-  onZoomChange: (zoom: number) => void;
+  scale: number;
+  filename: string;
 };
 
-export function PreviewPane({ svg, state, zoom, onZoomChange }: PreviewPaneProps) {
+export function PreviewPane({ svg, state, zoom, scale, filename }: PreviewPaneProps) {
+  const canExport = state.status === "ready" && Boolean(svg);
+
   return (
-    <section className="pane previewPane" aria-label="Mermaid 预览">
-      <div className="paneHeader">
-        <div>
-          <h2>预览</h2>
-          <span>{state.status === "ready" ? "可导出" : state.message}</span>
-        </div>
-        <label className="zoomControl">
-          <span>{zoom}%</span>
-          <input
-            type="range"
-            min={50}
-            max={180}
-            step={10}
-            value={zoom}
-            onChange={(event) => onZoomChange(Number(event.target.value))}
-          />
-        </label>
-      </div>
+    <section className="workspacePanel previewPane" aria-label="Mermaid 预览">
+      <Tabs
+        className="panelTabs"
+        items={[
+          {
+            key: "preview",
+            label: (
+              <span>
+                <EyeOutlined /> 预览
+              </span>
+            ),
+            children: null,
+          },
+          {
+            key: "export",
+            label: (
+              <span>
+                <SafetyCertificateOutlined /> 导出检查
+              </span>
+            ),
+            children: null,
+          },
+          {
+            key: "error",
+            label: (
+              <span>
+                <WarningOutlined /> 错误 <Badge count={state.status === "error" ? 1 : 0} />
+              </span>
+            ),
+            children: null,
+          },
+        ]}
+      />
 
       <div className="previewCanvas">
         {state.status === "error" ? (
-          <pre className="errorBox">{state.message}</pre>
-        ) : svg ? (
-          <div
-            className="svgSurface"
-            style={{ transform: `scale(${zoom / 100})` }}
-            dangerouslySetInnerHTML={{ __html: svg }}
+          <Alert
+            className="previewAlert"
+            showIcon
+            type="error"
+            message="Mermaid 语法错误"
+            description={state.message}
           />
+        ) : svg ? (
+          <Spin spinning={state.status === "rendering"} tip="正在渲染">
+            <div
+              className="svgSurface"
+              style={{ transform: `scale(${zoom / 100})` }}
+              dangerouslySetInnerHTML={{ __html: svg }}
+            />
+          </Spin>
         ) : (
-          <div className="emptyState">输入 Mermaid 代码后会在这里显示图表</div>
+          <Empty description="输入 Mermaid 代码后会在这里显示图表" />
         )}
+      </div>
+
+      <div className="previewMeta">
+        <span>{canExport ? "可导出" : state.message}</span>
+        <span>文件名：{filename || "diagram"}</span>
+        <span>导出倍率：{scale}x</span>
       </div>
     </section>
   );
