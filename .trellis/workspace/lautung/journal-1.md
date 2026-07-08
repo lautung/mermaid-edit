@@ -71,3 +71,36 @@ Added .gitattributes rules so Trellis scripts and platform hook Python files are
 ### Next Steps
 
 - None - task complete
+
+
+## Session 3: Ant Design Mermaid editor workspace
+
+**Date**: 2026-07-08
+**Task**: Ant Design Mermaid editor workspace
+**Branch**: `main`
+
+### Summary
+
+Implemented scheme B with Ant Design template library, editor preview workspace, settings panel, PRD/design docs, browser screenshots, and design QA.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `2cd541b` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
