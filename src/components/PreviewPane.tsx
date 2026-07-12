@@ -65,7 +65,7 @@ export function PreviewPane({ svg, state, zoom, scale, filename, background }: P
           <Spin spinning={state.status === "rendering"} tip="正在渲染">
             <div
               className="svgSurface"
-              style={{ transform: `scale(${zoom / 100})` }}
+              style={{ zoom: `${zoom}%` }}
               dangerouslySetInnerHTML={{ __html: svg }}
             />
           </Spin>

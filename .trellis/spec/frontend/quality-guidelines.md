@@ -20,6 +20,10 @@ New stateful UI behavior should have a focused Vitest test. For CodeMirror wrapp
 
 The hook may keep the previous SVG while the current request is `rendering`, but a stale request must never restore an SVG, `ready`, or `error` state. Tests should exercise the public `{ svg, state }` result with an older success, an older error, and an empty latest source.
 
+### Preview Scaling Contract
+
+Preview zoom must participate in layout sizing. Do not use `transform: scale(...)` for the rendered Mermaid surface: transforms do not change the scrollable layout area, so enlarged diagrams can be clipped. Apply the percentage with the CSS `zoom` property instead; the SVG's existing `max-width: 100%` and `height: auto` preserve its aspect ratio, while the preview canvas can scroll when enlarged. Add a focused component test for the `zoom` style and browser-check 50%, 100%, and 200% zoom.
+
 ## Testing Requirements
 
 Run `npm test -- --run`, `npm run lint`, and `npm run build`. For editor changes, verify in Chrome that valid Mermaid input renders, invalid input shows the existing error state, templates load, settings affect rendering, Markdown import handles multiple fenced blocks, and the 390px layout has no horizontal overflow. Blob downloads should be verified through the user-visible action path; automation may not expose a client-side download event.

@@ -13,6 +13,24 @@ class ResizeObserverStub {
 vi.stubGlobal("ResizeObserver", ResizeObserverStub);
 
 describe("PreviewPane", () => {
+  test("uses layout-aware zoom so enlarged diagrams keep a scrollable layout area", () => {
+    const { container } = render(
+      <PreviewPane
+        svg="<svg viewBox='0 0 1200 300'><rect width='1200' height='300' /></svg>"
+        state={{ status: "ready", message: "渲染完成" }}
+        zoom={200}
+        scale={2}
+        filename="diagram"
+        background="transparent"
+      />,
+    );
+
+    const surface = container.querySelector<HTMLElement>(".svgSurface");
+    expect(surface).not.toBeNull();
+    expect(surface?.style.zoom).toBe("200%");
+    expect(surface?.style.transform).toBe("");
+  });
+
   test("keeps syntax repair guidance in the editor instead of duplicating raw errors", () => {
     render(
       <PreviewPane
