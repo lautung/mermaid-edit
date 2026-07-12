@@ -2,58 +2,26 @@
 
 > How components are built in this project.
 
----
-
 ## Overview
 
-<!--
-Document your project's component conventions here.
-
-Questions to answer:
-- What component patterns do you use?
-- How are props defined?
-- How do you handle composition?
-- What accessibility standards apply?
--->
-
-(To be filled by the team)
-
----
+Frontend components are React function components with local TypeScript prop types. Components should preserve the existing data-flow contract of their parent and keep imperative browser libraries behind a focused wrapper.
 
 ## Component Structure
 
-<!-- Standard structure of a component file -->
-
-(To be filled by the team)
-
----
+Use this order: imports, local prop/type declarations, stable configuration constants, component function, and small local helpers. Put an imperative editor or DOM integration in its own component instead of mixing it into a layout component.
 
 ## Props Conventions
 
-<!-- How props should be defined and typed -->
-
-(To be filled by the team)
-
----
+Prefer explicit props such as `value: string` and `onChange: (value: string) => void` for controlled inputs. A component that wraps an imperative editor must call `onChange` only for user document changes and must synchronize external values without creating a feedback loop.
 
 ## Styling Patterns
 
-<!-- How styles are applied (CSS modules, styled-components, Tailwind, etc.) -->
-
-(To be filled by the team)
-
----
+This project uses shared styles in `src/styles.css`. Component-specific DOM classes should be stable and scoped under the component root, such as `.codeEditor .cm-editor`, so the surrounding layout remains compatible.
 
 ## Accessibility
 
-<!-- A11y requirements and patterns -->
-
-(To be filled by the team)
-
----
+Interactive regions require an accessible label. Code editors should expose a meaningful `aria-label` on the editor root and retain keyboard editing support.
 
 ## Common Mistakes
 
-<!-- Component-related mistakes your team has made -->
-
-(To be filled by the team)
+Avoid recreating an imperative editor whenever a controlled `value` changes. Create it once, dispatch external document replacements only when the document differs, and destroy it during cleanup.

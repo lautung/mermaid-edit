@@ -1,6 +1,7 @@
 import { Alert, Tabs, Typography } from "antd";
 import { CodeOutlined, ImportOutlined } from "@ant-design/icons";
 import type { RenderState } from "../types";
+import { MermaidCodeEditor } from "./MermaidCodeEditor";
 
 type EditorPaneProps = {
   value: string;
@@ -40,13 +41,7 @@ export function EditorPane({ value, renderState, onChange }: EditorPaneProps) {
           },
         ]}
       />
-      <textarea
-        className="codeEditor"
-        value={value}
-        spellCheck={false}
-        onChange={(event) => onChange(event.target.value)}
-        aria-label="输入 Mermaid 代码"
-      />
+      <MermaidCodeEditor value={value} onChange={onChange} />
       <div className="editorFooter">
         <Alert
           closable
