@@ -170,3 +170,36 @@ Replaced the native Mermaid source textarea with a controlled CodeMirror 6 edito
 ### Next Steps
 
 - None - task complete
+
+
+## Session 6: 修复 Mermaid 渲染竞态
+
+**Date**: 2026-07-12
+**Task**: 修复 Mermaid 渲染竞态
+**Branch**: `main`
+
+### Summary
+
+完成架构评审候选 01：useMermaidRenderer 为每次 source/settings 变化分配请求编号，只有最新请求可提交 ready/error；空输入会使在途请求失效。新增 3 个公开 hook 行为回归测试，更新前端质量规范，npm test/lint/build 全部通过。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `5b32968` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
