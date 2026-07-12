@@ -137,3 +137,36 @@ Replaced the native Mermaid source textarea with a controlled CodeMirror 6 edito
 ### Next Steps
 
 - None - task complete
+
+
+## Session 5: 完成 Mermaid 编辑器功能补全
+
+**Date**: 2026-07-12
+**Task**: 完成 Mermaid 编辑器功能补全
+**Branch**: `main`
+
+### Summary
+
+补全官方 Mermaid 常用图表模板，新增配置面板、ELK 布局、Frontmatter 覆盖提示、Markdown 多代码块导入导出，并完善模板 smoke test、README 与前端规范。通过 4 个测试文件共 10 个测试、Lint、生产构建和 Chrome 本地页面验收。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `f1e4f03` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
