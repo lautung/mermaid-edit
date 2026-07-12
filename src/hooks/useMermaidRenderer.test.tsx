@@ -1,0 +1,125 @@
+// @vitest-environment jsdom
+
+import { act, cleanup, render } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import mermaid from "mermaid";
+import type { ParseResult, RenderResult } from "mermaid";
+import { defaultDiagramSettings } from "../data/settings";
+import { useMermaidRenderer } from "./useMermaidRenderer";
+
+vi.mock("mermaid", () => ({
+  default: {
+    registerLayoutLoaders: vi.fn(),
+    initialize: vi.fn(),
+    parse: vi.fn(),
+    render: vi.fn(),
+  },
+}));
+
+type PendingRender = {
+  resolve: (result: RenderResult) => void;
+  reject: (reason?: unknown) => void;
+};
+
+const pendingRenders: PendingRender[] = [];
+
+function RenderProbe({ source }: { source: string }) {
+  const result = useMermaidRenderer(source, defaultDiagramSettings);
+
+  return (
+    <output
+      data-testid="render-result"
+      data-status={result.state.status}
+      data-svg={result.svg}
+    />
+  );
+}
+
+function getRenderResult(container: HTMLElement) {
+  return container.querySelector("[data-testid='render-result']") as HTMLElement;
+}
+
+async function startScheduledRender() {
+  await act(async () => {
+    vi.advanceTimersByTime(280);
+    await Promise.resolve();
+    await Promise.resolve();
+  });
+}
+
+async function resolveRender(index: number, svg: string) {
+  await act(async () => {
+    pendingRenders[index].resolve({ svg, diagramType: "flowchart" });
+    await Promise.resolve();
+  });
+}
+
+async function rejectRender(index: number, reason: Error) {
+  await act(async () => {
+    pendingRenders[index].reject(reason);
+    await Promise.resolve();
+  });
+}
+
+describe("useMermaidRenderer", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    pendingRenders.length = 0;
+    const parseResult: ParseResult = { diagramType: "flowchart", config: {} };
+    vi.mocked(mermaid.parse).mockResolvedValue(parseResult);
+    vi.mocked(mermaid.render).mockImplementation(
+      () =>
+        new Promise((resolve, reject) => {
+          pendingRenders.push({ resolve, reject });
+        }),
+    );
+  });
+
+  afterEach(() => {
+    cleanup();
+    vi.useRealTimers();
+    vi.clearAllMocks();
+  });
+
+  it("keeps the latest successful render when an older request finishes later", async () => {
+    const firstSource = "flowchart LR\n  A --> B";
+    const latestSource = "flowchart TD\n  A --> C";
+    const firstSvg = "<svg data-render='first'></svg>";
+    const latestSvg = "<svg data-render='latest'></svg>";
+    const { container, rerender } = render(<RenderProbe source={firstSource} />);
+
+    await startScheduledRender();
+    rerender(<RenderProbe source={latestSource} />);
+    await startScheduledRender();
+
+    await resolveRender(1, latestSvg);
+    expect(getRenderResult(container).dataset).toMatchObject({ status: "ready", svg: latestSvg });
+
+    await resolveRender(0, firstSvg);
+    expect(getRenderResult(container).dataset).toMatchObject({ status: "ready", svg: latestSvg });
+  });
+
+  it("ignores an older error after the latest request succeeds", async () => {
+    const { container, rerender } = render(<RenderProbe source="flowchart LR\n  A --> B" />);
+
+    await startScheduledRender();
+    rerender(<RenderProbe source="flowchart TD\n  A --> C" />);
+    await startScheduledRender();
+
+    await resolveRender(1, "<svg data-render='latest'></svg>");
+    await rejectRender(0, new Error("old request failed"));
+
+    expect(getRenderResult(container).dataset).toMatchObject({ status: "ready" });
+  });
+
+  it("does not restore an older result after the latest source is cleared", async () => {
+    const { container, rerender } = render(<RenderProbe source="flowchart LR\n  A --> B" />);
+
+    await startScheduledRender();
+    rerender(<RenderProbe source="" />);
+
+    expect(getRenderResult(container).dataset).toMatchObject({ status: "idle", svg: "" });
+    await resolveRender(0, "<svg data-render='old'></svg>");
+    expect(getRenderResult(container).dataset).toMatchObject({ status: "idle", svg: "" });
+  });
+});

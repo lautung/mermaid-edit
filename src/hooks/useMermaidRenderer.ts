@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import type { MutableRefObject } from "react";
 import mermaid from "mermaid";
 import elkLayouts from "@mermaid-js/layout-elk";
 import type { DiagramSettings, RenderState } from "../types";
@@ -32,6 +31,9 @@ export function useMermaidRenderer(source: string, settings: DiagramSettings) {
       deterministicIds: true,
     });
 
+    const currentId = renderId.current + 1;
+    renderId.current = currentId;
+
     if (!source.trim()) {
       setResult({
         svg: "",
@@ -40,15 +42,17 @@ export function useMermaidRenderer(source: string, settings: DiagramSettings) {
       return;
     }
 
-    const currentId = renderId.current + 1;
-    renderId.current = currentId;
     setResult((previous) => ({
       ...previous,
       state: { status: "rendering", message: "正在渲染..." },
     }));
 
     const timer = window.setTimeout(() => {
-      void renderDiagram(source, currentId, renderId).then(setResult);
+      void renderDiagram(source, currentId).then((nextResult) => {
+        if (renderId.current === currentId) {
+          setResult(nextResult);
+        }
+      });
     }, renderDelay);
 
     return () => window.clearTimeout(timer);
@@ -60,18 +64,10 @@ export function useMermaidRenderer(source: string, settings: DiagramSettings) {
 async function renderDiagram(
   source: string,
   currentId: number,
-  renderId: MutableRefObject<number>,
 ): Promise<RenderResult> {
   try {
     await mermaid.parse(source);
     const { svg } = await mermaid.render(`mermaid-output-${currentId}`, source);
-
-    if (renderId.current !== currentId) {
-      return {
-        svg: "",
-        state: { status: "rendering", message: "正在渲染..." },
-      };
-    }
 
     return {
       svg,
