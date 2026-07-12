@@ -16,8 +16,8 @@ New stateful UI behavior should have a focused Vitest test. For CodeMirror wrapp
 
 ## Testing Requirements
 
-Run `npm test -- --run`, `npm run lint`, and `npm run build`. For editor changes, verify in a browser that valid Mermaid input renders, invalid input shows the existing error state, and the 390px layout has no horizontal overflow.
+Run `npm test -- --run`, `npm run lint`, and `npm run build`. For editor changes, verify in Chrome that valid Mermaid input renders, invalid input shows the existing error state, templates load, settings affect rendering, Markdown import handles multiple fenced blocks, and the 390px layout has no horizontal overflow. Blob downloads should be verified through the user-visible action path; automation may not expose a client-side download event.
 
 ## Code Review Checklist
 
-Reviewers should check the parent-child prop contract, editor lifecycle cleanup, external synchronization annotations, accessibility labeling, and preservation of the existing Mermaid render/export flow.
+Reviewers should check the parent-child prop contract, editor lifecycle cleanup, external synchronization annotations, accessibility labeling, Frontmatter precedence, local-only persistence, official Mermaid template syntax, and preservation of the existing Mermaid render/export flow.

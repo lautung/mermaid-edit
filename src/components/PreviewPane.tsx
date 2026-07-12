@@ -8,9 +8,10 @@ type PreviewPaneProps = {
   zoom: number;
   scale: number;
   filename: string;
+  background: string;
 };
 
-export function PreviewPane({ svg, state, zoom, scale, filename }: PreviewPaneProps) {
+export function PreviewPane({ svg, state, zoom, scale, filename, background }: PreviewPaneProps) {
   const canExport = state.status === "ready" && Boolean(svg);
 
   return (
@@ -48,7 +49,10 @@ export function PreviewPane({ svg, state, zoom, scale, filename }: PreviewPanePr
         ]}
       />
 
-      <div className="previewCanvas">
+      <div
+        className="previewCanvas"
+        style={{ background: background === "transparent" ? undefined : background }}
+      >
         {state.status === "error" ? (
           <Alert
             className="previewAlert"

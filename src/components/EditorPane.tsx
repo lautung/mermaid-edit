@@ -7,9 +7,10 @@ type EditorPaneProps = {
   value: string;
   renderState: RenderState;
   onChange: (value: string) => void;
+  onOpenMarkdownImport: () => void;
 };
 
-export function EditorPane({ value, renderState, onChange }: EditorPaneProps) {
+export function EditorPane({ value, renderState, onChange, onOpenMarkdownImport }: EditorPaneProps) {
   const lineCount = value.split("\n").length;
   const statusType = renderState.status === "error" ? "error" : "success";
   const statusMessage =
@@ -19,6 +20,12 @@ export function EditorPane({ value, renderState, onChange }: EditorPaneProps) {
     <section className="workspacePanel editorPane" aria-label="Mermaid 代码编辑器">
       <Tabs
         className="panelTabs"
+        activeKey="code"
+        onTabClick={(key) => {
+          if (key === "markdown") {
+            onOpenMarkdownImport();
+          }
+        }}
         items={[
           {
             key: "code",
@@ -37,7 +44,6 @@ export function EditorPane({ value, renderState, onChange }: EditorPaneProps) {
               </span>
             ),
             children: null,
-            disabled: true,
           },
         ]}
       />

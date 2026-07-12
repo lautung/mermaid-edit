@@ -144,6 +144,187 @@ export const diagramTemplates: DiagramTemplate[] = [
       导出 PNG: 5: 作者
       插入文档: 5: 作者`,
   },
+  {
+    id: "pie-browser",
+    title: "饼图 - 浏览器占比",
+    type: "饼图",
+    tags: ["数据", "报告"],
+    source: `pie title 浏览器占比
+    "Chrome" : 65
+    "Edge" : 20
+    "Firefox" : 15`,
+  },
+  {
+    id: "quadrant-priority",
+    title: "象限图 - 技术优先级",
+    type: "象限图",
+    tags: ["决策", "产品流程"],
+    source: `quadrantChart
+    title 技术优先级
+    x-axis 低收益 --> 高收益
+    y-axis 低成本 --> 高成本
+    quadrant-1 重点投入
+    quadrant-2 评估成本
+    quadrant-3 暂缓
+    quadrant-4 快速收益
+    实时预览: [0.82, 0.55]
+    Markdown 导入: [0.62, 0.38]`,
+  },
+  {
+    id: "requirement-editor",
+    title: "需求图 - 编辑器需求",
+    type: "需求图",
+    tags: ["产品", "工程"],
+    source: `requirementDiagram
+    requirement editorRequirement {
+      id: 1
+      text: "支持实时预览"
+      risk: Low
+      verifymethod: Test
+    }
+    element browserApp {
+      type: system
+      docref: "web-app"
+    }
+    browserApp - satisfies -> editorRequirement`,
+  },
+  {
+    id: "mindmap-workbench",
+    title: "思维导图 - 工作台",
+    type: "思维导图",
+    tags: ["规划", "知识整理"],
+    source: `mindmap
+  root((编辑器工作台))
+    输入
+      Mermaid 代码
+      Markdown 导入
+    预览
+      实时渲染
+      配置主题
+    导出
+      SVG
+      PNG`,
+  },
+  {
+    id: "timeline-release",
+    title: "时间线 - 版本演进",
+    type: "时间线",
+    tags: ["规划", "项目管理"],
+    source: `timeline
+    title Mermaid 编辑器演进
+    2024 : 原型
+    2025 : 模板库
+    2026 : 配置面板`,
+  },
+  {
+    id: "sankey-flow",
+    title: "桑基图 - 用户流转",
+    type: "Sankey",
+    tags: ["数据", "流程"],
+    source: `sankey-beta
+    new_users,editor,12
+    returning_users,editor,8
+    editor,preview,16
+    editor,leave,4
+    preview,export,13
+    preview,continue_editing,3`,
+  },
+  {
+    id: "xychart-performance",
+    title: "XY 图 - 渲染耗时",
+    type: "XY 图",
+    tags: ["数据", "性能"],
+    source: `xychart-beta
+    title "渲染耗时"
+    x-axis ["1", "2", "3", "4"]
+    y-axis "毫秒" 0 --> 100
+    bar [35, 48, 32, 60]
+    line [35, 48, 32, 60]`,
+  },
+  {
+    id: "block-pipeline",
+    title: "块图 - 编辑流水线",
+    type: "块图",
+    tags: ["工程", "架构"],
+    source: `block
+    columns 3
+    A["编辑"] B["渲染"] C["导出"]
+    A --> B
+    B --> C`,
+  },
+  {
+    id: "packet-header",
+    title: "数据包 - 请求头",
+    type: "数据包图",
+    tags: ["网络", "工程"],
+    source: `packet-beta
+    0-3: "版本"
+    4-7: "类型"
+    8-15: "长度"
+    16-31: "请求 ID"`,
+  },
+  {
+    id: "kanban-release",
+    title: "看板 - 发布任务",
+    type: "看板",
+    tags: ["项目管理", "协作"],
+    source: `kanban
+      todo[Todo]
+        config[设计配置面板]
+        templates[补充图表模板]
+      progress[In Progress]
+        markdown[实现 Markdown 导入]
+      done[Done]
+        preview[实时预览]
+        svg[SVG 导出]`,
+  },
+  {
+    id: "architecture-editor",
+    title: "架构图 - 编辑器模块",
+    type: "架构图",
+    tags: ["架构", "工程"],
+    source: `architecture-beta
+    group app(cloud)[Editor]
+    service editor(server)[Code Editor] in app
+    service preview(server)[Preview] in app
+    service exporter(server)[Exporter] in app
+    editor:R -- L:preview
+    preview:R -- L:exporter`,
+  },
+  {
+    id: "radar-skills",
+    title: "雷达图 - 能力评估",
+    type: "雷达图",
+    tags: ["数据", "评估"],
+    source: `radar-beta
+    title 编辑器能力评估
+    axis experience["体验"], performance["性能"], extensibility["可扩展性"], compatibility["兼容性"]
+    curve current["当前版本"]{4, 3, 2, 4}
+    curve target["目标版本"]{5, 5, 5, 5}
+    max 5`,
+  },
+  {
+    id: "treemap-modules",
+    title: "树状图 - 模块占比",
+    type: "树状图",
+    tags: ["数据", "架构"],
+    source: `treemap-beta
+    "编辑器"
+    "编辑器/代码" : 35
+    "编辑器/预览" : 25
+    "编辑器/配置" : 15
+    "编辑器/导出" : 25`,
+  },
+  {
+    id: "venn-features",
+    title: "韦恩图 - 功能交集",
+    type: "韦恩图",
+    tags: ["数据", "分析"],
+    source: `venn-beta
+    set A["编辑器能力"]:80
+    set B["导出能力"]:60
+    union A,B["完整工作流"]:40`,
+  },
 ];
 
 export const initialDiagram = diagramTemplates[0].source;

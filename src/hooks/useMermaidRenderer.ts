@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import type { MutableRefObject } from "react";
 import mermaid from "mermaid";
-import type { MermaidTheme, RenderState } from "../types";
+import elkLayouts from "@mermaid-js/layout-elk";
+import type { DiagramSettings, RenderState } from "../types";
+
+mermaid.registerLayoutLoaders(elkLayouts);
 
 type RenderResult = {
   svg: string;
@@ -10,7 +13,7 @@ type RenderResult = {
 
 const renderDelay = 280;
 
-export function useMermaidRenderer(source: string, theme: MermaidTheme) {
+export function useMermaidRenderer(source: string, settings: DiagramSettings) {
   const renderId = useRef(0);
   const [result, setResult] = useState<RenderResult>({
     svg: "",
@@ -21,10 +24,12 @@ export function useMermaidRenderer(source: string, theme: MermaidTheme) {
     mermaid.initialize({
       startOnLoad: false,
       securityLevel: "strict",
-      theme,
+      theme: settings.theme,
+      themeVariables: { background: settings.background },
+      fontFamily: settings.fontFamily,
+      layout: settings.layout,
+      flowchart: { curve: settings.curve },
       deterministicIds: true,
-      fontFamily:
-        "Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
     });
 
     if (!source.trim()) {
@@ -47,7 +52,7 @@ export function useMermaidRenderer(source: string, theme: MermaidTheme) {
     }, renderDelay);
 
     return () => window.clearTimeout(timer);
-  }, [source, theme]);
+  }, [source, settings]);
 
   return result;
 }

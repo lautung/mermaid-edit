@@ -11,18 +11,23 @@ export function downloadSvg(svg: string, filename = "diagram.svg") {
   downloadBlob(new Blob([svg], { type: "image/svg+xml;charset=utf-8" }), filename);
 }
 
+export function downloadMarkdown(markdown: string, filename = "diagram.md") {
+  downloadBlob(new Blob([markdown], { type: "text/markdown;charset=utf-8" }), filename);
+}
+
 export async function downloadRaster(
   svg: string,
   format: Extract<ExportFormat, "png" | "jpg">,
   scale: number,
-  options: { filename?: string; transparentBackground?: boolean } = {},
+  options: { filename?: string; background?: string } = {},
 ) {
   const mimeType = format === "png" ? "image/png" : "image/jpeg";
   const blob = await svgToRasterBlob(svg, {
     scale,
     mimeType,
-    background:
-      format === "png" && options.transparentBackground ? "transparent" : "#ffffff",
+    background: format === "jpg" && options.background === "transparent"
+      ? "#ffffff"
+      : options.background ?? "#ffffff",
   });
 
   downloadBlob(blob, `${sanitizeFilename(options.filename) ?? "diagram"}.${format}`);
@@ -40,7 +45,8 @@ function downloadBlob(blob: Blob, filename: string) {
   document.body.append(link);
   link.click();
   link.remove();
-  URL.revokeObjectURL(url);
+  // Keep the object URL alive until Chromium has started the download.
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 function sanitizeFilename(filename?: string) {

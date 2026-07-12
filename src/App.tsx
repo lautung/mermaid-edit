@@ -10,11 +10,8 @@ import {
   Layout,
   List,
   Menu,
-  Select,
-  Slider,
   Space,
   Splitter,
-  Switch,
   Tag,
   Tooltip,
   Typography,
@@ -33,21 +30,24 @@ import {
   SettingOutlined,
 } from "@ant-design/icons";
 import { EditorPane } from "./components/EditorPane";
+import { MarkdownImportModal } from "./components/MarkdownImportModal";
 import { PreviewPane } from "./components/PreviewPane";
+import { SettingsPanel } from "./components/SettingsPanel";
 import { StatusBar } from "./components/StatusBar";
 import { diagramTemplates, initialDiagram } from "./data/examples";
+import { defaultDiagramSettings } from "./data/settings";
+import { useJsonLocalStorage } from "./hooks/useJsonLocalStorage";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useMermaidRenderer } from "./hooks/useMermaidRenderer";
-import type { ExportFormat, MermaidTheme } from "./types";
-import { copySvg, downloadRaster, downloadSvg } from "./utils/exportDiagram";
+import type { DiagramSettings, ExportFormat } from "./types";
+import { copySvg, downloadMarkdown, downloadRaster, downloadSvg } from "./utils/exportDiagram";
+import { formatMermaidMarkdown } from "./utils/markdownMermaid";
 
 const { Header, Sider, Content } = Layout;
 const { Text, Title } = Typography;
 const { useBreakpoint } = Grid;
 
 const chartTypes = Array.from(new Set(diagramTemplates.map((template) => template.type)));
-const themes: MermaidTheme[] = ["default", "base", "neutral", "forest", "dark"];
-
 export function App() {
   return (
     <ConfigProvider
@@ -75,14 +75,17 @@ function MermaidEditorApp() {
   const screens = useBreakpoint();
   const isCompact = !screens.md;
   const [source, setSource] = useLocalStorage("mermaid-edit:source", initialDiagram);
-  const [theme, setTheme] = useState<MermaidTheme>("base");
+  const [settings, setSettings] = useJsonLocalStorage<DiagramSettings>(
+    "mermaid-edit:settings",
+    defaultDiagramSettings,
+  );
   const [scale, setScale] = useState(2);
   const [zoom, setZoom] = useState(100);
-  const [transparentBackground, setTransparentBackground] = useState(true);
   const [filename, setFilename] = useState("mermaid-diagram");
   const [selectedType, setSelectedType] = useState(chartTypes[0]);
   const [search, setSearch] = useState("");
-  const { svg, state } = useMermaidRenderer(source, theme);
+  const [markdownImportOpen, setMarkdownImportOpen] = useState(false);
+  const { svg, state } = useMermaidRenderer(source, settings);
   const canExport = state.status === "ready" && Boolean(svg);
 
   const filteredTemplates = useMemo(
@@ -113,13 +116,21 @@ function MermaidEditorApp() {
       } else {
         await downloadRaster(svg, format, scale, {
           filename,
-          transparentBackground,
+          background: settings.background,
         });
       }
       message.success(`已导出 ${format.toUpperCase()}`);
     } catch (error) {
       message.error(error instanceof Error ? error.message : "导出失败");
     }
+  };
+
+  const handleExportMarkdown = () => {
+    downloadMarkdown(
+      formatMermaidMarkdown(source),
+      `${filename.trim() || "mermaid-diagram"}.md`,
+    );
+    message.success("Markdown 已导出");
   };
 
   const handleCopySvg = async () => {
@@ -168,7 +179,21 @@ function MermaidEditorApp() {
       disabled: !canExport,
       onClick: () => void handleExport("jpg"),
     },
+    {
+      key: "markdown",
+      label: "导出为 Markdown",
+      icon: <FileTextOutlined />,
+      disabled: !source.trim(),
+      onClick: handleExportMarkdown,
+    },
   ];
+
+  const updateSettings = <Key extends keyof DiagramSettings>(
+    key: Key,
+    value: DiagramSettings[Key],
+  ) => {
+    setSettings((current) => ({ ...current, [key]: value }));
+  };
 
   return (
     <Layout className="appShell">
@@ -276,19 +301,30 @@ function MermaidEditorApp() {
           <div className="workspace">
             {isCompact ? (
               <div className="mobileWorkspace">
-                <EditorPane value={source} renderState={state} onChange={setSource} />
+                <EditorPane
+                  value={source}
+                  renderState={state}
+                  onChange={setSource}
+                  onOpenMarkdownImport={() => setMarkdownImportOpen(true)}
+                />
                 <PreviewPane
                   svg={svg}
                   state={state}
                   zoom={zoom}
                   scale={scale}
                   filename={filename}
+                  background={settings.background}
                 />
               </div>
             ) : (
               <Splitter className="editorSplitter">
                 <Splitter.Panel defaultSize="42%" min="360px">
-                  <EditorPane value={source} renderState={state} onChange={setSource} />
+                <EditorPane
+                  value={source}
+                  renderState={state}
+                  onChange={setSource}
+                  onOpenMarkdownImport={() => setMarkdownImportOpen(true)}
+                />
                 </Splitter.Panel>
                 <Splitter.Panel min="420px">
                   <PreviewPane
@@ -297,74 +333,37 @@ function MermaidEditorApp() {
                     zoom={zoom}
                     scale={scale}
                     filename={filename}
+                    background={settings.background}
                   />
                 </Splitter.Panel>
               </Splitter>
             )}
 
-            <aside className="settingsPanel" aria-label="图表设置">
-              <div className="settingsHeader">
-                <Title level={5}>图表设置</Title>
-                <SettingOutlined />
-              </div>
-
-              <Space direction="vertical" size={18} className="settingsFields">
-                <label>
-                  <Text type="secondary">主题</Text>
-                  <Select
-                    value={theme}
-                    options={themes.map((item) => ({ label: item, value: item }))}
-                    onChange={setTheme}
-                  />
-                </label>
-
-                <label>
-                  <Text type="secondary">导出比例</Text>
-                  <Select
-                    value={scale}
-                    options={[1, 2, 3, 4].map((item) => ({
-                      label: `${item}x`,
-                      value: item,
-                    }))}
-                    onChange={setScale}
-                  />
-                </label>
-
-                <div className="switchRow">
-                  <Text type="secondary">透明背景（PNG）</Text>
-                  <Switch checked={transparentBackground} onChange={setTransparentBackground} />
-                </div>
-
-                <label>
-                  <Text type="secondary">文件名</Text>
-                  <Input value={filename} onChange={(event) => setFilename(event.target.value)} />
-                </label>
-
-                <div>
-                  <Text type="secondary">预览缩放</Text>
-                  <div className="zoomStepper">
-                    <Button onClick={() => setZoom((value) => Math.max(50, value - 10))}>-</Button>
-                    <Text>{zoom}%</Text>
-                    <Button onClick={() => setZoom((value) => Math.min(200, value + 10))}>+</Button>
-                  </div>
-                  <Slider min={50} max={200} step={10} value={zoom} onChange={setZoom} />
-                  <div className="zoomRange">
-                    <Text type="secondary">50%</Text>
-                    <Text type="secondary">100%</Text>
-                    <Text type="secondary">200%</Text>
-                  </div>
-                </div>
-
-                <Button icon={<ReloadOutlined />} onClick={() => setZoom(100)} block>
-                  重置视图
-                </Button>
-              </Space>
-            </aside>
+            <SettingsPanel
+              settings={settings}
+              scale={scale}
+              filename={filename}
+              zoom={zoom}
+              source={source}
+              onSettingsChange={updateSettings}
+              onScaleChange={setScale}
+              onFilenameChange={setFilename}
+              onZoomChange={setZoom}
+              onResetZoom={() => setZoom(100)}
+            />
           </div>
         </Content>
 
         <StatusBar renderState={state} sourceLength={source.length} zoom={zoom} />
       </Layout>
+      <MarkdownImportModal
+        open={markdownImportOpen}
+        onClose={() => setMarkdownImportOpen(false)}
+        onImport={(nextSource) => {
+          setSource(nextSource);
+          message.success("Mermaid 代码已从 Markdown 载入");
+        }}
+      />
     </Layout>
   );
 }

@@ -22,6 +22,12 @@ This project uses shared styles in `src/styles.css`. Component-specific DOM clas
 
 Interactive regions require an accessible label. Code editors should expose a meaningful `aria-label` on the editor root and retain keyboard editing support.
 
+## Feature Components
+
+Settings and import flows should be isolated in focused components with explicit controlled props. Browser-only behaviors such as local storage, Markdown parsing, Mermaid configuration detection, and blob downloads should remain behind small hooks or utility modules so the main layout only coordinates state and user actions.
+
+Mermaid templates are data, not component branches. Add a stable template id and type, keep user-facing labels in the template metadata, and use the bundled Mermaid parser to verify new official syntax.
+
 ## Common Mistakes
 
 Avoid recreating an imperative editor whenever a controlled `value` changes. Create it once, dispatch external document replacements only when the document differs, and destroy it during cleanup.
