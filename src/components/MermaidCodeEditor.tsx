@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { basicSetup } from "codemirror";
 import { indentWithTab } from "@codemirror/commands";
 import { Annotation, EditorState } from "@codemirror/state";
@@ -7,6 +7,12 @@ import { EditorView, keymap } from "@codemirror/view";
 type MermaidCodeEditorProps = {
   value: string;
   onChange: (value: string) => void;
+};
+
+export type MermaidCodeEditorHandle = {
+  focusLine: (line: number) => void;
+  insertAtCursor: (snippet: string) => void;
+  insertAfterLine: (line: number, snippet: string) => void;
 };
 
 const editorTheme = EditorView.theme({
@@ -45,7 +51,8 @@ const editorTheme = EditorView.theme({
 
 const externalUpdate = Annotation.define<boolean>();
 
-export function MermaidCodeEditor({ value, onChange }: MermaidCodeEditorProps) {
+export const MermaidCodeEditor = forwardRef<MermaidCodeEditorHandle, MermaidCodeEditorProps>(
+  function MermaidCodeEditor({ value, onChange }, ref) {
   const containerRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
   const initialValueRef = useRef(value);
@@ -107,5 +114,47 @@ export function MermaidCodeEditor({ value, onChange }: MermaidCodeEditorProps) {
     });
   }, [value]);
 
-  return <div ref={containerRef} className="codeEditor" aria-label="输入 Mermaid 代码" />;
+  useImperativeHandle(ref, () => ({
+    focusLine(line) {
+      const view = viewRef.current;
+      if (!view) {
+        return;
+      }
+
+      const target = getLine(view, line);
+      view.dispatch({
+        selection: { anchor: target.from },
+        effects: EditorView.scrollIntoView(target.from, { y: "center" }),
+      });
+      view.focus();
+    },
+    insertAtCursor(snippet) {
+      const view = viewRef.current;
+      if (!view) {
+        return;
+      }
+
+      const position = view.state.selection.main.from;
+      view.dispatch({ changes: { from: position, insert: snippet } });
+      view.focus();
+    },
+    insertAfterLine(line, snippet) {
+      const view = viewRef.current;
+      if (!view) {
+        return;
+      }
+
+      const target = getLine(view, line);
+      view.dispatch({ changes: { from: target.to, insert: `\n${snippet}` } });
+      view.focus();
+    },
+  }));
+
+    return <div ref={containerRef} className="codeEditor" aria-label="输入 Mermaid 代码" />;
+  },
+);
+
+function getLine(view: EditorView, line: number) {
+  const lineNumber = Math.max(1, Math.min(line, view.state.doc.lines));
+  return view.state.doc.line(lineNumber);
 }

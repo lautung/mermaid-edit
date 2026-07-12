@@ -28,6 +28,19 @@ Settings and import flows should be isolated in focused components with explicit
 
 Mermaid templates are data, not component branches. Add a stable template id and type, keep user-facing labels in the template metadata, and use the bundled Mermaid parser to verify new official syntax.
 
+## Syntax Diagnostics
+
+`useMermaidRenderer` owns Mermaid parse failures and may expose a structured diagnostic only on its `status: "error"` result. Keep the raw Mermaid message in the diagnostic for a collapsible technical-details view; render friendly summaries in surrounding status UI so parser output is not duplicated across the page.
+
+An editor-facing diagnostic must use the `MermaidCodeEditorHandle` commands instead of reaching into CodeMirror DOM from layout code:
+
+```tsx
+editorRef.current?.focusLine(diagnostic.line);
+editorRef.current?.insertAfterLine(diagnostic.line, diagnostic.rule.snippet);
+```
+
+Commands may focus or append text, but must not replace selected or existing source. This preserves the controlled `value` / `onChange` contract and keeps local persistence in `App` as the single source of truth.
+
 ## Common Mistakes
 
 Avoid recreating an imperative editor whenever a controlled `value` changes. Create it once, dispatch external document replacements only when the document differs, and destroy it during cleanup.

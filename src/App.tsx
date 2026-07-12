@@ -87,6 +87,7 @@ function MermaidEditorApp() {
   const [markdownImportOpen, setMarkdownImportOpen] = useState(false);
   const { svg, state } = useMermaidRenderer(source, settings);
   const canExport = state.status === "ready" && Boolean(svg);
+  const statusMessage = state.status === "error" && state.diagnostic ? state.diagnostic.summary : state.message;
 
   const filteredTemplates = useMemo(
     () =>
@@ -264,7 +265,7 @@ function MermaidEditorApp() {
             <Title level={3}>Mermaid 在线编辑器</Title>
             <Tag color="cyan">浏览器本地处理</Tag>
             <Badge status={canExport ? "success" : state.status === "error" ? "error" : "processing"} />
-            <Text type="secondary">{canExport ? "已保存" : state.message}</Text>
+            <Text type="secondary">{canExport ? "已保存" : statusMessage}</Text>
           </Space>
 
           <Space className="headerActions">

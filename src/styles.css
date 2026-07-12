@@ -264,6 +264,59 @@ input {
   white-space: nowrap;
 }
 
+.editorFooterWithAssistant {
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+}
+
+.editorFooterWithAssistant > .ant-typography {
+  padding: 0 16px 12px;
+}
+
+.syntaxAssistant {
+  display: grid;
+  gap: 10px;
+  padding: 12px 14px 0;
+}
+
+.syntaxAssistant .ant-alert {
+  border-radius: 6px;
+}
+
+.syntaxAssistantMeta {
+  min-width: 0;
+}
+
+.syntaxAssistantSnippet {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid #f0d4d4;
+  border-radius: 6px;
+  background: #fffafa;
+}
+
+.syntaxAssistantSnippet .ant-typography {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.syntaxAssistantDetails {
+  color: #66736f;
+  font-size: 12px;
+}
+
+.syntaxAssistantDetails summary {
+  width: fit-content;
+  cursor: pointer;
+}
+
+.syntaxAssistantDetails .ant-typography {
+  margin: 8px 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
 .previewCanvas {
   position: relative;
   display: grid;

@@ -58,8 +58,8 @@ export function PreviewPane({ svg, state, zoom, scale, filename, background }: P
             className="previewAlert"
             showIcon
             type="error"
-            message="Mermaid 语法错误"
-            description={state.message}
+            title="Mermaid 语法错误"
+            description="请在左侧编辑器中定位并修复语法错误。"
           />
         ) : svg ? (
           <Spin spinning={state.status === "rendering"} tip="正在渲染">
@@ -75,7 +75,7 @@ export function PreviewPane({ svg, state, zoom, scale, filename, background }: P
       </div>
 
       <div className="previewMeta">
-        <span>{canExport ? "可导出" : state.message}</span>
+        <span>{canExport ? "可导出" : state.status === "error" ? "请在编辑器中修复语法错误" : state.message}</span>
         <span>文件名：{filename || "diagram"}</span>
         <span>导出倍率：{scale}x</span>
       </div>

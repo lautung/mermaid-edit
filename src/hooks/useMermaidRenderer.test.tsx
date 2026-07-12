@@ -26,11 +26,14 @@ const pendingRenders: PendingRender[] = [];
 function RenderProbe({ source }: { source: string }) {
   const result = useMermaidRenderer(source, defaultDiagramSettings);
 
+  const diagnostic = result.state.status === "error" ? result.state.diagnostic : undefined;
+
   return (
     <output
       data-testid="render-result"
       data-status={result.state.status}
       data-svg={result.svg}
+      data-diagnostic={diagnostic?.summary}
     />
   );
 }
@@ -121,5 +124,17 @@ describe("useMermaidRenderer", () => {
     expect(getRenderResult(container).dataset).toMatchObject({ status: "idle", svg: "" });
     await resolveRender(0, "<svg data-render='old'></svg>");
     expect(getRenderResult(container).dataset).toMatchObject({ status: "idle", svg: "" });
+  });
+
+  it("adds a structured syntax diagnostic to the latest parse error", async () => {
+    vi.mocked(mermaid.parse).mockRejectedValueOnce(new Error("Parse error on line 2"));
+    const { container } = render(<RenderProbe source="flowchart TD\n  start[开始] -->" />);
+
+    await startScheduledRender();
+
+    expect(getRenderResult(container).dataset).toMatchObject({
+      status: "error",
+      diagnostic: expect.stringContaining("流程图"),
+    });
   });
 });

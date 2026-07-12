@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import mermaid from "mermaid";
 import elkLayouts from "@mermaid-js/layout-elk";
+import { deriveSyntaxDiagnostic } from "../diagnostics/deriveSyntaxDiagnostic";
 import type { DiagramSettings, RenderState } from "../types";
 
 mermaid.registerLayoutLoaders(elkLayouts);
@@ -74,11 +75,14 @@ async function renderDiagram(
       state: { status: "ready", message: "渲染完成" },
     };
   } catch (error) {
+    const diagnostic = deriveSyntaxDiagnostic(source, error);
+
     return {
       svg: "",
       state: {
         status: "error",
-        message: error instanceof Error ? error.message : "Mermaid 语法错误",
+        message: diagnostic.rawMessage,
+        diagnostic,
       },
     };
   }
