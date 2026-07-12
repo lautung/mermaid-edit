@@ -236,3 +236,36 @@ Replaced the native Mermaid source textarea with a controlled CodeMirror 6 edito
 ### Next Steps
 
 - None - task complete
+
+
+## Session 8: 实现 Mermaid 语法修复助手
+
+**Date**: 2026-07-12
+**Task**: 实现 Mermaid 语法修复助手
+**Branch**: `main`
+
+### Summary
+
+实现 44 条图表专属诊断规则、CodeMirror 定位与安全插入、错误助手界面和浏览器验证。
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `7ee824f` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
