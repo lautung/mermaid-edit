@@ -203,3 +203,36 @@ Replaced the native Mermaid source textarea with a controlled CodeMirror 6 edito
 ### Next Steps
 
 - None - task complete
+
+
+## Session 7: 升级 Trellis CLI 与项目 skills
+
+**Date**: 2026-07-12
+**Task**: 升级 Trellis CLI 与项目 skills
+**Branch**: `main`
+
+### Summary
+
+按官网路径将全局 @mindfoldhq/trellis 与项目 Trellis 从 0.6.5 升级到 0.6.6；同步 .trellis、.agents/skills、.codex、.claude、.cursor 生成文件，完成 lint、build、13 项测试、Trellis 校验和 diff 检查。
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `621303f` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
