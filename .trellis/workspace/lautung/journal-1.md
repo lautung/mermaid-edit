@@ -269,3 +269,36 @@ Replaced the native Mermaid source textarea with a controlled CodeMirror 6 edito
 ### Next Steps
 
 - None - task complete
+
+
+## Session 9: 修复 Mermaid 预览缩放
+
+**Date**: 2026-07-12
+**Task**: 修复 Mermaid 预览缩放
+**Branch**: `main`
+
+### Summary
+
+将预览缩放从不参与布局的 transform 改为 CSS zoom，放大图表可滚动查看且保持比例；新增回归测试并完成浏览器验证。
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `c2d59fb` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
