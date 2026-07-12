@@ -104,3 +104,36 @@ Implemented scheme B with Ant Design template library, editor preview workspace,
 ### Next Steps
 
 - None - task complete
+
+
+## Session 4: Upgrade Mermaid editor with CodeMirror 6
+
+**Date**: 2026-07-12
+**Task**: Upgrade Mermaid editor with CodeMirror 6
+**Branch**: `main`
+
+### Summary
+
+Replaced the native Mermaid source textarea with a controlled CodeMirror 6 editor, added Vitest/jsdom behavior tests, preserved Mermaid preview and export flow, verified lint/build and Chrome desktop/mobile behavior, and updated frontend component/quality specs.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `8aac6ff` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
