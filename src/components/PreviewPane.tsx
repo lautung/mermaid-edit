@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 import { Alert, Badge, Empty, Spin, Tabs } from "antd";
 import { EyeOutlined, WarningOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
 import { useI18n } from "../i18n/useI18n";
-import type { RenderState } from "../types";
+import type { PreviewTab, RenderState } from "../types";
 import { getSvgDimensionsFromMarkup } from "../utils/svgDimensions";
 
 type PreviewPaneProps = {
@@ -13,6 +13,8 @@ type PreviewPaneProps = {
   scale: number;
   filename: string;
   background: string;
+  activeTab: PreviewTab;
+  onActiveTabChange: (tab: PreviewTab) => void;
 };
 
 type PreviewSurfaceStyle = CSSProperties & {
@@ -28,7 +30,16 @@ const previewBounds = {
   maxScrollWidth: 1800,
 };
 
-export function PreviewPane({ svg, state, zoom, scale, filename, background }: PreviewPaneProps) {
+export function PreviewPane({
+  svg,
+  state,
+  zoom,
+  scale,
+  filename,
+  background,
+  activeTab,
+  onActiveTabChange,
+}: PreviewPaneProps) {
   const { messages } = useI18n();
   const canExport = state.status === "ready" && Boolean(svg);
   const surfaceStyle = useMemo<PreviewSurfaceStyle>(
@@ -43,6 +54,12 @@ export function PreviewPane({ svg, state, zoom, scale, filename, background }: P
     <section className="workspacePanel previewPane" aria-label={messages.preview.ariaLabel}>
       <Tabs
         className="panelTabs"
+        activeKey={activeTab}
+        onChange={(tab) => {
+          if (isPreviewTab(tab)) {
+            onActiveTabChange(tab);
+          }
+        }}
         items={[
           {
             key: "preview",
@@ -149,4 +166,8 @@ function getPreviewSurfaceSize(svg: string): PreviewSurfaceStyle {
     "--preview-width": `${Math.round(width)}px`,
     "--preview-height": `${Math.round(height)}px`,
   };
+}
+
+function isPreviewTab(value: string): value is PreviewTab {
+  return value === "preview" || value === "export" || value === "error";
 }

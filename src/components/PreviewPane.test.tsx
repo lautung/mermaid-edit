@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
-import { render, screen } from "@testing-library/react";
-import { describe, expect, test, vi } from "vitest";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, test, vi } from "vitest";
 import { PreviewPane } from "./PreviewPane";
 
 class ResizeObserverStub {
@@ -13,6 +13,10 @@ class ResizeObserverStub {
 vi.stubGlobal("ResizeObserver", ResizeObserverStub);
 
 describe("PreviewPane", () => {
+  afterEach(() => {
+    cleanup();
+  });
+
   test("uses layout-aware zoom so enlarged diagrams keep a scrollable layout area", () => {
     const { container } = render(
       <PreviewPane
@@ -22,6 +26,8 @@ describe("PreviewPane", () => {
         scale={2}
         filename="diagram"
         background="transparent"
+        activeTab="preview"
+        onActiveTabChange={vi.fn()}
       />,
     );
 
@@ -42,6 +48,8 @@ describe("PreviewPane", () => {
         scale={2}
         filename="diagram"
         background="transparent"
+        activeTab="preview"
+        onActiveTabChange={vi.fn()}
       />,
     );
 
@@ -57,6 +65,8 @@ describe("PreviewPane", () => {
         scale={2}
         filename="diagram"
         background="transparent"
+        activeTab="preview"
+        onActiveTabChange={vi.fn()}
       />,
     );
 
@@ -81,10 +91,33 @@ describe("PreviewPane", () => {
         scale={2}
         filename="diagram"
         background="transparent"
+        activeTab="preview"
+        onActiveTabChange={vi.fn()}
       />,
     );
 
     expect(screen.getByText("请在左侧编辑器中定位并修复语法错误。")).not.toBeNull();
     expect(screen.queryByText("Parse error on line 2")).toBeNull();
+  });
+
+  test("reports controlled preview tab changes", () => {
+    const onActiveTabChange = vi.fn();
+
+    render(
+      <PreviewPane
+        svg="<svg viewBox='0 0 120 80'><rect width='120' height='80' /></svg>"
+        state={{ status: "ready", message: "渲染完成" }}
+        zoom={100}
+        scale={2}
+        filename="diagram"
+        background="transparent"
+        activeTab="preview"
+        onActiveTabChange={onActiveTabChange}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("tab", { name: /导出检查/ }));
+
+    expect(onActiveTabChange).toHaveBeenCalledWith("export");
   });
 });

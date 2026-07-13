@@ -4,6 +4,7 @@ import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/re
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import mermaid from "mermaid";
 import type { ParseResult } from "mermaid";
+import { MemoryRouter } from "react-router";
 import { App } from "./App";
 import { messages } from "./i18n/messages";
 
@@ -88,7 +89,7 @@ describe("App internationalization", () => {
   });
 
   test("switches the editor chrome and template metadata locale", async () => {
-    render(<App />);
+    renderApp();
 
     fireEvent.mouseDown(screen.getByRole("combobox", { name: "界面语言" }));
     fireEvent.click(await screen.findByText("English"));
@@ -113,7 +114,7 @@ describe("App internationalization", () => {
       value: "ja-JP",
     });
 
-    render(<App />);
+    renderApp();
 
     expect(await screen.findByRole("heading", { name: "Mermaid オンラインエディター" })).not.toBeNull();
     expect(screen.getByLabelText("Mermaid コードを入力")).not.toBeNull();
@@ -134,10 +135,22 @@ describe("App internationalization", () => {
       value: "ja-JP",
     });
 
-    render(<App />);
+    renderApp();
 
     expect(await screen.findByRole("heading", { name: "Mermaid Online Editor" })).not.toBeNull();
     expect(screen.getByLabelText("Enter Mermaid code")).not.toBeNull();
+  });
+
+  test("initializes lightweight view state from URL search params", async () => {
+    renderApp(["/?type=类图&q=服务&tab=export&zoom=150&scale=3&filename=demo"]);
+
+    expect(await screen.findByRole("heading", { name: "Mermaid 在线编辑器" })).not.toBeNull();
+    expect((screen.getByPlaceholderText("搜索模板") as HTMLInputElement).value).toBe("服务");
+    expect(screen.getByRole("button", { name: "类图" }).getAttribute("aria-pressed")).toBe("true");
+    expect(screen.getByRole("tab", { name: /导出检查/ }).getAttribute("aria-selected")).toBe("true");
+    expect((screen.getByRole("textbox", { name: "文件名" }) as HTMLInputElement).value).toBe("demo");
+    expect(screen.getByText("150%")).not.toBeNull();
+    expect(screen.getByText("导出倍率：3x")).not.toBeNull();
   });
 
   test.each([
@@ -160,3 +173,11 @@ describe("App internationalization", () => {
     },
   );
 });
+
+function renderApp(initialEntries = ["/"]) {
+  return render(
+    <MemoryRouter initialEntries={initialEntries}>
+      <App />
+    </MemoryRouter>,
+  );
+}

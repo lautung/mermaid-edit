@@ -20,6 +20,7 @@ import { TemplateManagerModal } from "./components/TemplateManagerModal";
 import { diagramTemplates, initialDiagram } from "./data/examples";
 import { defaultDiagramSettings, normalizeDiagramSettings } from "./data/settings";
 import { useExportActions } from "./hooks/useExportActions";
+import { useEditorSearchParams } from "./hooks/useEditorSearchParams";
 import { useJsonLocalStorage } from "./hooks/useJsonLocalStorage";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useMermaidRenderer } from "./hooks/useMermaidRenderer";
@@ -86,13 +87,22 @@ function MermaidEditorApp() {
     defaultDiagramSettings,
     normalizeDiagramSettings,
   );
-  const [scale, setScale] = useState(2);
-  const [zoom, setZoom] = useState(100);
-  const [filename, setFilename] = useState("mermaid-diagram");
-  const [selectedType, setSelectedType] = useState(chartTypes[0]);
-  const [search, setSearch] = useState("");
   const [markdownImportOpen, setMarkdownImportOpen] = useState(false);
   const [templateManagerOpen, setTemplateManagerOpen] = useState(false);
+  const {
+    selectedType,
+    search,
+    activePreviewTab,
+    zoom,
+    scale,
+    filename,
+    setSelectedType,
+    setSearch,
+    setActivePreviewTab,
+    setZoom,
+    setScale,
+    setFilename,
+  } = useEditorSearchParams({ chartTypes });
   const rendererLocale = useMemo(
     () => ({
       diagnostics: diagnosticMessages,
@@ -200,6 +210,8 @@ function MermaidEditorApp() {
                   scale={scale}
                   filename={filename}
                   background={settings.background}
+                  activeTab={activePreviewTab}
+                  onActiveTabChange={setActivePreviewTab}
                 />
               </div>
             ) : (
@@ -220,6 +232,8 @@ function MermaidEditorApp() {
                     scale={scale}
                     filename={filename}
                     background={settings.background}
+                    activeTab={activePreviewTab}
+                    onActiveTabChange={setActivePreviewTab}
                   />
                 </Splitter.Panel>
               </Splitter>

@@ -2,6 +2,8 @@ import type { SyntaxDiagnostic } from "./diagnostics/types";
 
 export type ExportFormat = "svg" | "png" | "jpg";
 
+export type PreviewTab = "preview" | "export" | "error";
+
 export type MermaidTheme = "default" | "base" | "dark" | "forest" | "neutral";
 
 export type MermaidLayout = "dagre" | "elk";
