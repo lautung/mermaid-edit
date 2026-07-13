@@ -533,3 +533,36 @@ Updated README and AGENTS with current Mermaid editor facts, added live desktop/
 ### Next Steps
 
 - None - task complete
+
+
+## Session 17: Merge i18n branch to main
+
+**Date**: 2026-07-13
+**Task**: Merge i18n branch to main
+**Branch**: `main`
+
+### Summary
+
+Merged codex/i18n into main, resolved conflicts with the template manager work, validated tests lint and build, and pushed main to origin.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `7062ee4` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

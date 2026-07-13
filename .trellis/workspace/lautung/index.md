@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 16
+- **Total Sessions**: 17
 - **Last Active**: 2026-07-13
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~535 | Active |
+| `journal-1.md` | ~568 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 17 | 2026-07-13 | Merge i18n branch to main | `7062ee4` | `main` |
 | 16 | 2026-07-13 | Refresh Mermaid editor docs and specs | `0ae8326` | `main` |
 | 15 | 2026-07-13 | Fix Mermaid editor cursor visibility | `bc18f7b` | `main` |
 | 14 | 2026-07-13 | Fix brand icon rendering | `2cb6951` | `main` |
