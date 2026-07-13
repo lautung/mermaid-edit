@@ -60,6 +60,12 @@ Preview sizing and raster export must use the same SVG dimension parser. Do not 
 
 Raster export may still apply export-specific fallback dimensions when parsing fails, but the first parse attempt should come from the shared utility. Tests for export changes should assert the canvas size and the SVG passed to `Canvg.fromString`.
 
+### Export Filename Contract
+
+Export UI should pass a user-facing basename to `downloadSvg`, `downloadRaster`, and `downloadMarkdown`. The export utilities own invalid-character sanitization, fallback names, and appending the final extension.
+
+Do not build extension-bearing filenames in `App.tsx` for individual formats. Centralizing this in `exportDiagram.ts` prevents duplicated extensions and keeps SVG / PNG / JPG / Markdown filename behavior consistent.
+
 ### Build Chunking Contract
 
 Use dynamic imports for browser-only heavy paths that are not needed for initial editing, such as raster export. `canvg` belongs inside the PNG/JPG export path, while SVG and Markdown export should not load it.

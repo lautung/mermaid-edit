@@ -7,12 +7,18 @@ type RasterOptions = {
   mimeType: "image/png" | "image/jpeg";
 };
 
-export function downloadSvg(svg: string, filename = "diagram.svg") {
-  downloadBlob(new Blob([svg], { type: "image/svg+xml;charset=utf-8" }), filename);
+export function downloadSvg(svg: string, filename = "diagram") {
+  downloadBlob(
+    new Blob([svg], { type: "image/svg+xml;charset=utf-8" }),
+    formatDownloadFilename(filename, "svg", "diagram"),
+  );
 }
 
-export function downloadMarkdown(markdown: string, filename = "diagram.md") {
-  downloadBlob(new Blob([markdown], { type: "text/markdown;charset=utf-8" }), filename);
+export function downloadMarkdown(markdown: string, filename = "diagram") {
+  downloadBlob(
+    new Blob([markdown], { type: "text/markdown;charset=utf-8" }),
+    formatDownloadFilename(filename, "md", "diagram"),
+  );
 }
 
 export async function downloadRaster(
@@ -30,7 +36,7 @@ export async function downloadRaster(
       : options.background ?? "#ffffff",
   });
 
-  downloadBlob(blob, `${sanitizeFilename(options.filename) ?? "diagram"}.${format}`);
+  downloadBlob(blob, formatDownloadFilename(options.filename, format, "diagram"));
 }
 
 export async function copySvg(svg: string) {
@@ -59,6 +65,23 @@ function sanitizeFilename(filename?: string) {
   return Array.from(trimmed, (char) =>
     invalidChars.has(char) || char.charCodeAt(0) < 32 ? "-" : char,
   ).join("");
+}
+
+function formatDownloadFilename(filename: string | undefined, extension: string, fallback: string) {
+  const safeName = sanitizeFilename(stripExtension(filename, extension)) ?? fallback;
+
+  return `${safeName}.${extension}`;
+}
+
+function stripExtension(filename: string | undefined, extension: string) {
+  const trimmed = filename?.trim();
+  const suffix = `.${extension}`;
+
+  if (!trimmed || trimmed.toLowerCase().endsWith(suffix)) {
+    return trimmed?.slice(0, -suffix.length);
+  }
+
+  return trimmed;
 }
 
 async function svgToRasterBlob(svg: string, options: RasterOptions) {

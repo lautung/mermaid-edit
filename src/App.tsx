@@ -161,7 +161,7 @@ function MermaidEditorApp() {
 
     try {
       if (format === "svg") {
-        downloadSvg(svg, `${filename || "diagram"}.svg`);
+        downloadSvg(svg, filename);
       } else {
         await downloadRaster(svg, format, scale, {
           filename,
@@ -175,10 +175,7 @@ function MermaidEditorApp() {
   };
 
   const handleExportMarkdown = () => {
-    downloadMarkdown(
-      formatMermaidMarkdown(source),
-      `${filename.trim() || "mermaid-diagram"}.md`,
-    );
+    downloadMarkdown(formatMermaidMarkdown(source), filename);
     message.success(messages.feedback.markdownExported);
   };
 

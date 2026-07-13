@@ -3,7 +3,7 @@
   "name": "harden-export-edge-cases",
   "title": "Harden export edge cases",
   "description": "Finish export-path consistency work from the optimization research, including filename sanitation parity and regression tests for browser export failures.",
-  "status": "planning",
+  "status": "in_progress",
   "dev_type": null,
   "scope": null,
   "package": null,

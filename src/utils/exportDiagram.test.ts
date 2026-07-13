@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { downloadRaster } from "./exportDiagram";
+import { downloadMarkdown, downloadRaster, downloadSvg } from "./exportDiagram";
 
 const canvgMocks = vi.hoisted(() => ({
   fromString: vi.fn(),
@@ -80,6 +80,36 @@ afterEach(() => {
 });
 
 describe("downloadRaster", () => {
+  it("sanitizes SVG download filenames", () => {
+    downloadSvg("<svg></svg>", "bad<name>");
+
+    expect(clickedDownload).toBe("bad-name-.svg");
+  });
+
+  it("sanitizes Markdown download filenames", () => {
+    downloadMarkdown("```mermaid\nflowchart LR\n  A --> B\n```", "bad/name");
+
+    expect(clickedDownload).toBe("bad-name.md");
+  });
+
+  it("falls back when download filenames are blank", () => {
+    downloadSvg("<svg></svg>", "   ");
+
+    expect(clickedDownload).toBe("diagram.svg");
+  });
+
+  it("does not duplicate existing filename extensions", () => {
+    downloadSvg("<svg></svg>", "diagram.svg");
+
+    expect(clickedDownload).toBe("diagram.svg");
+  });
+
+  it("falls back for blank Markdown filenames", () => {
+    downloadMarkdown("```mermaid\nflowchart LR\n  A --> B\n```", "");
+
+    expect(clickedDownload).toBe("diagram.md");
+  });
+
   it("uses comma-separated viewBox dimensions for raster export", async () => {
     await downloadRaster(
       "<svg viewBox='0,0,320,160'><rect width='320' height='160' /></svg>",
