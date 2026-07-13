@@ -665,3 +665,37 @@ Added one automatic retry for Mermaid dynamic chunk load failures while keeping 
 ### Next Steps
 
 - None - task complete
+
+
+## Session 21: Frontend cleanup optimization
+
+**Date**: 2026-07-13
+**Task**: Frontend cleanup optimization
+**Branch**: `main`
+
+### Summary
+
+Documented frontend optimization research, removed the unused Toolbar/lucide dependency, and memoized SettingsPanel frontmatter override parsing after tests, lint, and build passed.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `c624dea` | (see git log) |
+| `13888fa` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
