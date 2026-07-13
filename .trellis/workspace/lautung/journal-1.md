@@ -732,3 +732,37 @@ Unified SVG dimension parsing for preview and raster export, added focused raste
 ### Next Steps
 
 - None - task complete
+
+
+## Session 23: Optimize raster export bundle
+
+**Date**: 2026-07-13
+**Task**: Optimize raster export bundle
+**Branch**: `main`
+
+### Summary
+
+Planned the Mermaid editor optimization task tree, lazy-loaded canvg for raster exports, added Vite chunks for Ant Design, CodeMirror, and raster export dependencies, and documented Mermaid manual chunking constraints.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `cdecb7c` | (see git log) |
+| `366a13c` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
