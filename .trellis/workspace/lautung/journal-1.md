@@ -799,3 +799,36 @@ Split Mermaid initialization from render scheduling, prevented locale-only UI te
 ### Next Steps
 
 - None - task complete
+
+
+## Session 25: Harden export filenames
+
+**Date**: 2026-07-13
+**Task**: Harden export filenames
+**Branch**: `main`
+
+### Summary
+
+Centralized export filename formatting in exportDiagram utilities, normalized SVG/PNG/JPG/Markdown filename sanitation and extension handling, updated App export callers, and documented the export filename contract.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `b033c4c` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

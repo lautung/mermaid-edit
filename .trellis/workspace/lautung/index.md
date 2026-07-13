@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 24
+- **Total Sessions**: 25
 - **Last Active**: 2026-07-13
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~801 | Active |
+| `journal-1.md` | ~834 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 25 | 2026-07-13 | Harden export filenames | `b033c4c` | `main` |
 | 24 | 2026-07-13 | Optimize Mermaid render lifecycle | `3ad62f1` | `main` |
 | 23 | 2026-07-13 | Optimize raster export bundle | `cdecb7c`, `366a13c` | `main` |
 | 22 | 2026-07-13 | Export SVG sizing hardening | `065bdbf` | `main` |
