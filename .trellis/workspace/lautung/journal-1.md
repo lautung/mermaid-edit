@@ -832,3 +832,36 @@ Centralized export filename formatting in exportDiagram utilities, normalized SV
 ### Next Steps
 
 - None - task complete
+
+
+## Session 26: Harden local storage settings
+
+**Date**: 2026-07-13
+**Task**: Harden local storage settings
+**Branch**: `main`
+
+### Summary
+
+Made localStorage persistence best-effort for string and JSON hooks, added runtime normalization for diagram settings restored from storage, wired settings normalization into the app, and documented the persistence safety contract.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `8f4788b` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
