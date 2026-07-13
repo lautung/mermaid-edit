@@ -699,3 +699,36 @@ Documented frontend optimization research, removed the unused Toolbar/lucide dep
 ### Next Steps
 
 - None - task complete
+
+
+## Session 22: Export SVG sizing hardening
+
+**Date**: 2026-07-13
+**Task**: Export SVG sizing hardening
+**Branch**: `main`
+
+### Summary
+
+Unified SVG dimension parsing for preview and raster export, added focused raster export tests, and documented the shared parser contract after tests, lint, and build passed.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `065bdbf` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
