@@ -60,6 +60,14 @@ Icon-only buttons require an accessible name through Ant Design tooltip/title/ar
 
 Mermaid templates are data, not component branches. Add a stable template id and type, keep user-facing labels in template metadata, and verify new official syntax with Mermaid tests.
 
+## Internationalization
+
+User-facing component text should come from `useI18n()` rather than local string literals. Keep locale selection and Ant Design locale wiring at the app shell, and pass translated accessibility labels into imperative wrappers such as `MermaidCodeEditor` without changing their controlled `value` / `onChange` contract.
+
+Template Mermaid source strings are stable examples and should not be rewritten for locale changes. Localize template titles, types, and tags through the i18n metadata layer keyed by the template id, then keep the original Mermaid source parseable by the bundled Mermaid parser.
+
+## Syntax Diagnostics
+
 `useMermaidRenderer` owns Mermaid parse failures and may expose a structured diagnostic only on its `status: "error"` result. Keep the raw Mermaid message in the diagnostic for technical details; render friendly summaries in surrounding status UI.
 
 Editor-facing diagnostic actions must use `MermaidCodeEditorHandle` commands:

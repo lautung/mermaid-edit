@@ -1,7 +1,8 @@
 import { Alert, Button, Input, Select, Slider, Space, Tag, Typography } from "antd";
 import { ReloadOutlined, SettingOutlined } from "@ant-design/icons";
 import type { ReactNode } from "react";
-import type { DiagramSettingKey, DiagramSettings } from "../types";
+import { useI18n } from "../i18n/useI18n";
+import type { DiagramSettings } from "../types";
 import { getFrontmatterOverrides } from "../utils/mermaidConfig";
 
 type SettingsPanelProps = {
@@ -20,20 +21,6 @@ type SettingsPanelProps = {
   onResetZoom: () => void;
 };
 
-const settingLabels: Record<DiagramSettingKey, string> = {
-  theme: "主题",
-  background: "背景色",
-  fontFamily: "字体",
-  layout: "图表布局",
-  curve: "连线曲线",
-};
-
-const backgroundOptions = [
-  { label: "透明", value: "transparent" },
-  { label: "白色", value: "#ffffff" },
-  { label: "浅灰", value: "#f4f7f6" },
-];
-
 export function SettingsPanel({
   settings,
   scale,
@@ -46,17 +33,23 @@ export function SettingsPanel({
   onZoomChange,
   onResetZoom,
 }: SettingsPanelProps) {
+  const { messages } = useI18n();
   const overriddenKeys = getOverriddenKeys(source);
+  const backgroundOptions = [
+    { label: messages.settings.backgroundOptions.transparent, value: "transparent" },
+    { label: messages.settings.backgroundOptions.white, value: "#ffffff" },
+    { label: messages.settings.backgroundOptions.lightGray, value: "#f4f7f6" },
+  ];
 
   return (
-    <aside className="settingsPanel" aria-label="图表设置">
+    <aside className="settingsPanel" aria-label={messages.settings.ariaLabel}>
       <div className="settingsHeader">
-        <Typography.Title level={5}>图表设置</Typography.Title>
+        <Typography.Title level={5}>{messages.settings.title}</Typography.Title>
         <SettingOutlined />
       </div>
 
       <Space direction="vertical" size={18} className="settingsFields">
-        <SettingsField label="主题" overridden={overriddenKeys.has("theme")}>
+        <SettingsField label={messages.settings.fields.theme} overridden={overriddenKeys.has("theme")}>
           <Select
             value={settings.theme}
             options={[
@@ -70,11 +63,11 @@ export function SettingsPanel({
           />
         </SettingsField>
 
-        <SettingsField label="背景色" overridden={overriddenKeys.has("background")}>
+        <SettingsField label={messages.settings.fields.background} overridden={overriddenKeys.has("background")}>
           <div className="backgroundField">
             <Select
               value={backgroundOptions.some((option) => option.value === settings.background) ? settings.background : "custom"}
-              options={[...backgroundOptions, { label: "自定义", value: "custom" }]}
+              options={[...backgroundOptions, { label: messages.settings.backgroundOptions.custom, value: "custom" }]}
               onChange={(value) => {
                 if (value !== "custom") {
                   onSettingsChange("background", value);
@@ -82,7 +75,7 @@ export function SettingsPanel({
               }}
             />
             <input
-              aria-label="自定义背景色"
+              aria-label={messages.settings.customBackgroundAriaLabel}
               type="color"
               value={settings.background === "transparent" ? "#ffffff" : settings.background}
               onChange={(event) => onSettingsChange("background", event.target.value)}
@@ -90,42 +83,45 @@ export function SettingsPanel({
           </div>
         </SettingsField>
 
-        <SettingsField label="字体" overridden={overriddenKeys.has("fontFamily")}>
+        <SettingsField label={messages.settings.fields.fontFamily} overridden={overriddenKeys.has("fontFamily")}>
           <Select
             value={settings.fontFamily}
             options={[
               { label: "Inter", value: "Inter" },
-              { label: "系统字体", value: "system-ui" },
-              { label: "等宽字体", value: "monospace" },
+              { label: messages.settings.fontOptions.system, value: "system-ui" },
+              { label: messages.settings.fontOptions.monospace, value: "monospace" },
             ]}
             onChange={(value) => onSettingsChange("fontFamily", value)}
           />
         </SettingsField>
 
-        <SettingsField label="图表布局" overridden={overriddenKeys.has("layout")}>
+        <SettingsField label={messages.settings.fields.layout} overridden={overriddenKeys.has("layout")}>
           <Select
             value={settings.layout}
-            options={[{ label: "Dagre（默认）", value: "dagre" }, { label: "ELK（复杂关系）", value: "elk" }]}
+            options={[
+              { label: messages.settings.layoutOptions.dagre, value: "dagre" },
+              { label: messages.settings.layoutOptions.elk, value: "elk" },
+            ]}
             onChange={(value) => onSettingsChange("layout", value)}
           />
         </SettingsField>
 
-        <SettingsField label="连线曲线" overridden={overriddenKeys.has("curve")}>
+        <SettingsField label={messages.settings.fields.curve} overridden={overriddenKeys.has("curve")}>
           <Select
             value={settings.curve}
             options={[
-              { label: "Basis 平滑", value: "basis" },
-              { label: "Linear 直线", value: "linear" },
-              { label: "Bump X", value: "bumpX" },
-              { label: "Monotone X", value: "monotoneX" },
-              { label: "Natural 自然", value: "natural" },
-              { label: "Step 阶梯", value: "step" },
+              { label: messages.settings.curveOptions.basis, value: "basis" },
+              { label: messages.settings.curveOptions.linear, value: "linear" },
+              { label: messages.settings.curveOptions.bumpX, value: "bumpX" },
+              { label: messages.settings.curveOptions.monotoneX, value: "monotoneX" },
+              { label: messages.settings.curveOptions.natural, value: "natural" },
+              { label: messages.settings.curveOptions.step, value: "step" },
             ]}
             onChange={(value) => onSettingsChange("curve", value)}
           />
         </SettingsField>
 
-        <SettingsField label="导出比例" overridden={false}>
+        <SettingsField label={messages.settings.fields.scale} overridden={false}>
           <Select
             value={scale}
             options={[1, 2, 3, 4].map((item) => ({ label: `${item}x`, value: item }))}
@@ -133,7 +129,7 @@ export function SettingsPanel({
           />
         </SettingsField>
 
-        <SettingsField label="文件名" overridden={false}>
+        <SettingsField label={messages.settings.fields.filename} overridden={false}>
           <Input value={filename} onChange={(event) => onFilenameChange(event.target.value)} />
         </SettingsField>
 
@@ -141,13 +137,15 @@ export function SettingsPanel({
           <Alert
             showIcon
             type="warning"
-            message={`源码已覆盖：${Array.from(overriddenKeys, (key) => settingLabels[key]).join("、")}`}
-            description="当前面板配置仍会保存，但渲染时以 Mermaid 源码中的 Frontmatter 为准。"
+            message={messages.settings.sourceOverrideMessage(
+              Array.from(overriddenKeys, (key) => messages.settings.fields[key]).join("、"),
+            )}
+            description={messages.settings.sourceOverrideDescription}
           />
         ) : null}
 
         <div>
-          <Typography.Text type="secondary">预览缩放</Typography.Text>
+          <Typography.Text type="secondary">{messages.settings.previewZoom}</Typography.Text>
           <div className="zoomStepper">
             <Button onClick={() => onZoomChange(Math.max(50, zoom - 10))}>-</Button>
             <Typography.Text>{zoom}%</Typography.Text>
@@ -162,7 +160,7 @@ export function SettingsPanel({
         </div>
 
         <Button icon={<ReloadOutlined />} onClick={onResetZoom} block>
-          重置视图
+          {messages.settings.resetView}
         </Button>
       </Space>
     </aside>
@@ -178,11 +176,13 @@ function SettingsField({
   overridden: boolean;
   children: ReactNode;
 }) {
+  const { messages } = useI18n();
+
   return (
     <label>
       <span className="settingsLabel">
         <Typography.Text type="secondary">{label}</Typography.Text>
-        {overridden ? <Tag color="orange">源码覆盖</Tag> : null}
+        {overridden ? <Tag color="orange">{messages.settings.sourceOverrideTag}</Tag> : null}
       </span>
       {children}
     </label>

@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import type { CSSProperties } from "react";
 import { Alert, Badge, Empty, Spin, Tabs } from "antd";
 import { EyeOutlined, WarningOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
+import { useI18n } from "../i18n/useI18n";
 import type { RenderState } from "../types";
 
 type PreviewPaneProps = {
@@ -27,6 +28,7 @@ const previewBounds = {
 };
 
 export function PreviewPane({ svg, state, zoom, scale, filename, background }: PreviewPaneProps) {
+  const { messages } = useI18n();
   const canExport = state.status === "ready" && Boolean(svg);
   const surfaceStyle = useMemo<PreviewSurfaceStyle>(
     () => ({
@@ -37,7 +39,7 @@ export function PreviewPane({ svg, state, zoom, scale, filename, background }: P
   );
 
   return (
-    <section className="workspacePanel previewPane" aria-label="Mermaid 预览">
+    <section className="workspacePanel previewPane" aria-label={messages.preview.ariaLabel}>
       <Tabs
         className="panelTabs"
         items={[
@@ -45,7 +47,7 @@ export function PreviewPane({ svg, state, zoom, scale, filename, background }: P
             key: "preview",
             label: (
               <span>
-                <EyeOutlined /> 预览
+                <EyeOutlined /> {messages.preview.previewTab}
               </span>
             ),
             children: null,
@@ -54,7 +56,7 @@ export function PreviewPane({ svg, state, zoom, scale, filename, background }: P
             key: "export",
             label: (
               <span>
-                <SafetyCertificateOutlined /> 导出检查
+                <SafetyCertificateOutlined /> {messages.preview.exportCheckTab}
               </span>
             ),
             children: null,
@@ -63,7 +65,7 @@ export function PreviewPane({ svg, state, zoom, scale, filename, background }: P
             key: "error",
             label: (
               <span>
-                <WarningOutlined /> 错误 <Badge count={state.status === "error" ? 1 : 0} />
+                <WarningOutlined /> {messages.preview.errorTab} <Badge count={state.status === "error" ? 1 : 0} />
               </span>
             ),
             children: null,
@@ -80,11 +82,11 @@ export function PreviewPane({ svg, state, zoom, scale, filename, background }: P
             className="previewAlert"
             showIcon
             type="error"
-            title="Mermaid 语法错误"
-            description="请在左侧编辑器中定位并修复语法错误。"
+            title={messages.preview.syntaxErrorTitle}
+            description={messages.preview.syntaxErrorDescription}
           />
         ) : svg ? (
-          <Spin spinning={state.status === "rendering"} tip="正在渲染">
+          <Spin spinning={state.status === "rendering"} tip={messages.common.loading}>
             <div
               className="svgSurface"
               style={surfaceStyle}
@@ -92,14 +94,14 @@ export function PreviewPane({ svg, state, zoom, scale, filename, background }: P
             />
           </Spin>
         ) : (
-          <Empty description="输入 Mermaid 代码后会在这里显示图表" />
+          <Empty description={messages.preview.emptyDescription} />
         )}
       </div>
 
       <div className="previewMeta">
-        <span>{canExport ? "可导出" : state.status === "error" ? "请在编辑器中修复语法错误" : state.message}</span>
-        <span>文件名：{filename || "diagram"}</span>
-        <span>导出倍率：{scale}x</span>
+        <span>{canExport ? messages.preview.exportable : state.status === "error" ? messages.preview.fixSyntaxError : state.message}</span>
+        <span>{messages.preview.filename(filename || messages.common.diagramFallback)}</span>
+        <span>{messages.preview.exportScale(scale)}</span>
       </div>
     </section>
   );

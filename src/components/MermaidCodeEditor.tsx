@@ -6,6 +6,7 @@ import { EditorView, keymap } from "@codemirror/view";
 
 type MermaidCodeEditorProps = {
   value: string;
+  ariaLabel?: string;
   onChange: (value: string) => void;
 };
 
@@ -56,7 +57,7 @@ const editorTheme = EditorView.theme({
 const externalUpdate = Annotation.define<boolean>();
 
 export const MermaidCodeEditor = forwardRef<MermaidCodeEditorHandle, MermaidCodeEditorProps>(
-  function MermaidCodeEditor({ value, onChange }, ref) {
+  function MermaidCodeEditor({ value, ariaLabel = "输入 Mermaid 代码", onChange }, ref) {
   const containerRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
   const initialValueRef = useRef(value);
@@ -154,7 +155,7 @@ export const MermaidCodeEditor = forwardRef<MermaidCodeEditorHandle, MermaidCode
     },
   }));
 
-    return <div ref={containerRef} className="codeEditor" aria-label="输入 Mermaid 代码" />;
+    return <div ref={containerRef} className="codeEditor" aria-label={ariaLabel} />;
   },
 );
 

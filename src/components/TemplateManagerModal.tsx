@@ -2,6 +2,7 @@ import { Button, Input, Modal, Select, Space, Tag, Typography } from "antd";
 import { PictureOutlined, SearchOutlined } from "@ant-design/icons";
 import { useMemo, useState } from "react";
 import type { DiagramTemplate } from "../data/examples";
+import { useI18n } from "../i18n/useI18n";
 
 type TemplateManagerModalProps = {
   open: boolean;
@@ -20,23 +21,45 @@ export function TemplateManagerModal({
   onClose,
   onSelectTemplate,
 }: TemplateManagerModalProps) {
-  const [selectedType, setSelectedType] = useState<string>("全部");
+  const { messages, templateText } = useI18n();
+  const [selectedType, setSelectedType] = useState<string>("");
   const [search, setSearch] = useState("");
+
+  const localizedTemplates = useMemo(
+    () =>
+      templates.map((template) => ({
+        ...template,
+        text: templateText(template.id, template),
+      })),
+    [templateText, templates],
+  );
+
+  const chartTypeOptions = useMemo(() => {
+    const labels = new Map<string, string>();
+    localizedTemplates.forEach((template) => {
+      labels.set(template.type, template.text.type);
+    });
+
+    return [
+      { label: messages.templateManager.allTypes, value: "" },
+      ...chartTypes.map((type) => ({ label: labels.get(type) ?? type, value: type })),
+    ];
+  }, [chartTypes, localizedTemplates, messages.templateManager.allTypes]);
 
   const filteredTemplates = useMemo(() => {
     const keyword = search.trim().toLowerCase();
 
-    return templates.filter((template) => {
-      const matchesType = selectedType === "全部" || template.type === selectedType;
+    return localizedTemplates.filter((template) => {
+      const matchesType = !selectedType || template.type === selectedType;
       const matchesSearch =
         !keyword ||
-        template.title.toLowerCase().includes(keyword) ||
-        template.type.toLowerCase().includes(keyword) ||
-        template.tags.some((tag) => tag.toLowerCase().includes(keyword));
+        template.text.title.toLowerCase().includes(keyword) ||
+        template.text.type.toLowerCase().includes(keyword) ||
+        template.text.tags.some((tag) => tag.toLowerCase().includes(keyword));
 
       return matchesType && matchesSearch;
     });
-  }, [search, selectedType, templates]);
+  }, [localizedTemplates, search, selectedType]);
 
   const handleSelect = (templateId: string) => {
     onSelectTemplate(templateId);
@@ -46,7 +69,7 @@ export function TemplateManagerModal({
   return (
     <Modal
       open={open}
-      title="管理模板"
+      title={messages.templateManager.title}
       footer={null}
       onCancel={onClose}
       destroyOnHidden
@@ -56,21 +79,21 @@ export function TemplateManagerModal({
         <div className="templateManagerToolbar">
           <Input
             allowClear
-            aria-label="搜索模板"
+            aria-label={messages.templateManager.searchAriaLabel}
             prefix={<SearchOutlined />}
-            placeholder="搜索标题、类型或标签"
+            placeholder={messages.templateManager.searchPlaceholder}
             value={search}
             onChange={(event) => setSearch(event.target.value)}
           />
           <Select
-            aria-label="筛选图表类型"
+            aria-label={messages.templateManager.filterTypeAriaLabel}
             value={selectedType}
-            options={["全部", ...chartTypes].map((type) => ({ label: type, value: type }))}
+            options={chartTypeOptions}
             onChange={setSelectedType}
           />
         </div>
 
-        <div className="templateManagerList" role="list" aria-label="模板管理列表">
+        <div className="templateManagerList" role="list" aria-label={messages.templateManager.listAriaLabel}>
           {filteredTemplates.length > 0 ? (
             filteredTemplates.map((item) => (
               <div key={item.id} role="listitem" className="templateManagerItem">
@@ -79,12 +102,12 @@ export function TemplateManagerModal({
                 </div>
                 <div className="templateManagerMeta">
                   <Space size={8} wrap>
-                    <Typography.Text strong>{item.title}</Typography.Text>
-                    <Tag color="cyan">{item.type}</Tag>
+                    <Typography.Text strong>{item.text.title}</Typography.Text>
+                    <Tag color="cyan">{item.text.type}</Tag>
                   </Space>
                   <Space size={[4, 4]} wrap>
-                    {item.tags.map((tag) => (
-                      <Tag key={tag} color={tag === "常用" ? "green" : "blue"}>
+                    {item.text.tags.map((tag) => (
+                      <Tag key={tag} color={tag === messages.templateManager.commonTag ? "green" : "blue"}>
                         {tag}
                       </Tag>
                     ))}
@@ -94,12 +117,14 @@ export function TemplateManagerModal({
                   type={item.id === activeTemplateId ? "default" : "primary"}
                   onClick={() => handleSelect(item.id)}
                 >
-                  {item.id === activeTemplateId ? "当前模板" : "载入"}
+                  {item.id === activeTemplateId
+                    ? messages.templateManager.currentTemplate
+                    : messages.templateManager.loadTemplate}
                 </Button>
               </div>
             ))
           ) : (
-            <Typography.Text type="secondary">没有匹配的模板</Typography.Text>
+            <Typography.Text type="secondary">{messages.templateManager.emptyTemplates}</Typography.Text>
           )}
         </div>
       </Space>

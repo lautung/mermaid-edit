@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import type { ChangeEvent } from "react";
 import { Alert, Input, Modal, Select, Space, Typography } from "antd";
+import { useI18n } from "../i18n/useI18n";
 import { extractMermaidBlocks } from "../utils/markdownMermaid";
 
 type MarkdownImportModalProps = {
@@ -10,6 +11,7 @@ type MarkdownImportModalProps = {
 };
 
 export function MarkdownImportModal({ open, onClose, onImport }: MarkdownImportModalProps) {
+  const { messages } = useI18n();
   const [markdown, setMarkdown] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [error, setError] = useState("");
@@ -30,7 +32,7 @@ export function MarkdownImportModal({ open, onClose, onImport }: MarkdownImportM
     try {
       handleMarkdownChange(await file.text());
     } catch {
-      setError("无法读取该 Markdown 文件");
+      setError(messages.markdownImport.readError);
     } finally {
       event.target.value = "";
     }
@@ -38,7 +40,7 @@ export function MarkdownImportModal({ open, onClose, onImport }: MarkdownImportM
 
   const handleImport = () => {
     if (blocks.length === 0) {
-      setError("没有找到可导入的 Mermaid 代码块");
+      setError(messages.markdownImport.noBlocks);
       return;
     }
 
@@ -52,9 +54,9 @@ export function MarkdownImportModal({ open, onClose, onImport }: MarkdownImportM
   return (
     <Modal
       open={open}
-      title="导入 Markdown 中的 Mermaid"
-      okText="载入代码"
-      cancelText="取消"
+      title={messages.markdownImport.title}
+      okText={messages.markdownImport.okText}
+      cancelText={messages.common.cancel}
       onCancel={onClose}
       onOk={handleImport}
       okButtonProps={{ disabled: blocks.length === 0 }}
@@ -62,10 +64,10 @@ export function MarkdownImportModal({ open, onClose, onImport }: MarkdownImportM
     >
       <Space direction="vertical" size={14} className="markdownImportForm">
         <Typography.Text type="secondary">
-          粘贴 Markdown 文本，或选择本地 .md 文件。代码只在浏览器中处理。
+          {messages.markdownImport.description}
         </Typography.Text>
         <label className="markdownFileInput">
-          <span>选择 Markdown 文件</span>
+          <span>{messages.markdownImport.chooseFile}</span>
           <input type="file" accept=".md,text/markdown" onChange={handleFileChange} />
         </label>
         <Input.TextArea
@@ -76,17 +78,17 @@ export function MarkdownImportModal({ open, onClose, onImport }: MarkdownImportM
         />
         {blocks.length > 1 ? (
           <Select
-            aria-label="选择 Mermaid 代码块"
+            aria-label={messages.markdownImport.selectBlockAriaLabel}
             value={selectedIndex}
             options={blocks.map((block) => ({
-              label: `第 ${block.index} 个代码块`,
+              label: messages.markdownImport.blockLabel(block.index),
               value: block.index - 1,
             }))}
             onChange={setSelectedIndex}
           />
         ) : null}
         {blocks.length > 0 ? (
-          <Typography.Text type="success">找到 {blocks.length} 个 Mermaid 代码块</Typography.Text>
+          <Typography.Text type="success">{messages.markdownImport.blocksFound(blocks.length)}</Typography.Text>
         ) : null}
         {error ? <Alert showIcon type="error" message={error} /> : null}
       </Space>
