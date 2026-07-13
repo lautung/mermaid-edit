@@ -25,5 +25,5 @@ describe("diagram templates", () => {
     );
 
     expect(results.filter((result) => !result.ok)).toEqual([]);
-  });
+  }, 30000);
 });

@@ -9,7 +9,6 @@ import {
   Input,
   Layout,
   List,
-  Menu,
   Space,
   Splitter,
   Tag,
@@ -213,16 +212,19 @@ function MermaidEditorApp() {
         <Text className="siderSectionTitle" type="secondary">
           图表类型
         </Text>
-        <Menu
-          className="templateMenu"
-          mode="inline"
-          selectedKeys={[selectedType]}
-          items={chartTypes.map((type) => ({
-            key: type,
-            label: type,
-          }))}
-          onClick={({ key }) => setSelectedType(String(key))}
-        />
+        <div className="templateTypeGrid" role="group" aria-label="图表类型">
+          {chartTypes.map((type) => (
+            <button
+              key={type}
+              type="button"
+              className={`templateTypeButton${type === selectedType ? " templateTypeButtonActive" : ""}`}
+              aria-pressed={type === selectedType}
+              onClick={() => setSelectedType(type)}
+            >
+              {type}
+            </button>
+          ))}
+        </div>
 
         <Text className="siderSectionTitle" type="secondary">
           模板列表

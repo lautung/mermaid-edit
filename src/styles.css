@@ -37,6 +37,13 @@ input {
   background: #ffffff;
 }
 
+.templateSider .ant-layout-sider-children {
+  display: grid;
+  height: 100vh;
+  min-height: 0;
+  grid-template-rows: auto auto auto auto minmax(148px, 1fr) auto;
+}
+
 .siderHeader {
   display: grid;
   gap: 14px;
@@ -54,25 +61,55 @@ input {
   font-weight: 650;
 }
 
-.templateMenu {
-  border-inline-end: 0 !important;
-  padding: 0 8px;
+.templateTypeGrid {
+  display: flex;
+  max-height: 154px;
+  min-height: 0;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+  overflow: auto;
+  padding: 0 12px 8px;
 }
 
-.templateMenu .ant-menu-item {
-  height: 38px;
-  margin-inline: 0;
+.templateTypeButton {
+  min-width: 72px;
+  max-width: 112px;
+  height: 32px;
+  flex: 1 1 78px;
+  overflow: hidden;
+  border: 1px solid #d8e4e2;
   border-radius: 6px;
+  background: #ffffff;
+  color: #33423f;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-overflow: ellipsis;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    color 160ms ease;
+  white-space: nowrap;
 }
 
-.templateMenu .ant-menu-item-selected {
-  border-right: 3px solid #0f8f82;
+.templateTypeButton:hover {
+  border-color: #91d5cf;
+  background: #f0fbf9;
+  color: #0f8f82;
+}
+
+.templateTypeButtonActive {
+  border-color: #0f8f82;
+  background: #e9f8f5;
+  color: #0b6f66;
 }
 
 .templateList {
-  max-height: calc(100vh - 395px);
+  min-height: 0;
   overflow: auto;
-  padding: 0 12px;
+  padding: 0 12px 6px;
 }
 
 .templateItem {
@@ -119,11 +156,8 @@ input {
 }
 
 .manageTemplateButton {
-  position: absolute;
-  right: 12px;
-  bottom: 14px;
-  left: 12px;
-  width: auto;
+  width: auto !important;
+  margin: 8px 12px 14px;
 }
 
 .appHeader {
