@@ -164,6 +164,7 @@ export type AppMessages = {
     empty: string;
     rendering: string;
     ready: string;
+    chunkLoadFailed: string;
   };
   syntaxAssistant: {
     ariaLabel: string;

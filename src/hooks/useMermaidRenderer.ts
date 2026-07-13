@@ -18,6 +18,7 @@ type RenderLocaleMessages = {
   empty: string;
   rendering: string;
   ready: string;
+  chunkLoadFailed: string;
 };
 
 type MermaidRendererLocale = {
@@ -93,14 +94,17 @@ async function renderDiagram(
   localeMessages: MermaidRendererLocale,
 ): Promise<RenderResult> {
   try {
-    await mermaid.parse(source);
-    const { svg } = await mermaid.render(`mermaid-output-${currentId}`, source);
+    const svg = await renderMermaidSvg(source, currentId);
 
     return {
       svg,
       state: { status: "ready", message: localeMessages.render.ready },
     };
   } catch (error) {
+    if (isDynamicImportLoadError(error)) {
+      return renderDiagramAfterChunkRetry(source, currentId, localeMessages);
+    }
+
     const diagnostic = deriveSyntaxDiagnostic(source, error, localeMessages.diagnostics);
 
     return {
@@ -112,4 +116,57 @@ async function renderDiagram(
       },
     };
   }
+}
+
+async function renderDiagramAfterChunkRetry(
+  source: string,
+  currentId: number,
+  localeMessages: MermaidRendererLocale,
+): Promise<RenderResult> {
+  try {
+    const svg = await renderMermaidSvg(source, currentId);
+
+    return {
+      svg,
+      state: { status: "ready", message: localeMessages.render.ready },
+    };
+  } catch (error) {
+    if (isDynamicImportLoadError(error)) {
+      return {
+        svg: "",
+        state: {
+          status: "error",
+          message: localeMessages.render.chunkLoadFailed,
+        },
+      };
+    }
+
+    const diagnostic = deriveSyntaxDiagnostic(source, error, localeMessages.diagnostics);
+
+    return {
+      svg: "",
+      state: {
+        status: "error",
+        message: diagnostic.rawMessage,
+        diagnostic,
+      },
+    };
+  }
+}
+
+async function renderMermaidSvg(source: string, currentId: number) {
+  await mermaid.parse(source);
+  const { svg } = await mermaid.render(`mermaid-output-${currentId}`, source);
+
+  return svg;
+}
+
+function isDynamicImportLoadError(error: unknown) {
+  if (!(error instanceof Error)) {
+    return false;
+  }
+
+  return /failed to fetch dynamically imported module|importing a module script failed/i.test(
+    error.message,
+  );
 }

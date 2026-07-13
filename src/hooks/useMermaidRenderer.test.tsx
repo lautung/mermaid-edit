@@ -33,6 +33,7 @@ function RenderProbe({ source }: { source: string }) {
       data-testid="render-result"
       data-status={result.state.status}
       data-svg={result.svg}
+      data-message={result.state.message}
       data-diagnostic={diagnostic?.summary}
     />
   );
@@ -145,6 +146,61 @@ describe("useMermaidRenderer", () => {
     expect(getRenderResult(container).dataset).toMatchObject({
       status: "error",
       diagnostic: expect.stringContaining("流程图"),
+    });
+  });
+
+  it("retries once when a chunk load fails", async () => {
+    vi.mocked(mermaid.render).mockRejectedValueOnce(
+      new TypeError("Failed to fetch dynamically imported module: /assets/stateDiagram.js"),
+    );
+    vi.mocked(mermaid.render).mockResolvedValueOnce({
+      svg: "<svg data-render='retry'></svg>",
+      diagramType: "state",
+    });
+    const { container } = render(<RenderProbe source="stateDiagram-v2\n  [*] --> Idle" />);
+
+    await startScheduledRender();
+
+    expect(mermaid.render).toHaveBeenCalledTimes(2);
+    expect(getRenderResult(container).dataset).toMatchObject({
+      status: "ready",
+      svg: "<svg data-render='retry'></svg>",
+    });
+  });
+
+  it("reports a chunk load failure after the retry also fails", async () => {
+    vi.mocked(mermaid.render)
+      .mockRejectedValueOnce(
+        new TypeError("Failed to fetch dynamically imported module: /assets/stateDiagram.js"),
+      )
+      .mockRejectedValueOnce(
+        new TypeError("Failed to fetch dynamically imported module: /assets/stateDiagram.js"),
+      );
+    const { container } = render(<RenderProbe source="stateDiagram-v2\n  [*] --> Idle" />);
+
+    await startScheduledRender();
+
+    expect(mermaid.render).toHaveBeenCalledTimes(2);
+    expect(getRenderResult(container).dataset).toMatchObject({
+      status: "error",
+      message: "图表资源加载失败，请刷新页面后重试。",
+    });
+    expect(getRenderResult(container).dataset.diagnostic).toBeUndefined();
+  });
+
+  it("keeps syntax diagnostics if a retry reaches a Mermaid parse error", async () => {
+    vi.mocked(mermaid.render).mockRejectedValueOnce(
+      new TypeError("Failed to fetch dynamically imported module: /assets/stateDiagram.js"),
+    );
+    vi.mocked(mermaid.parse).mockResolvedValueOnce({ diagramType: "flowchart", config: {} });
+    vi.mocked(mermaid.parse).mockRejectedValueOnce(new Error("Parse error on line 2"));
+    const { container } = render(<RenderProbe source="stateDiagram-v2\n  [*] --> Idle" />);
+
+    await startScheduledRender();
+
+    expect(getRenderResult(container).dataset).toMatchObject({
+      status: "error",
+      diagnostic: expect.stringContaining("Mermaid 语法无法解析"),
     });
   });
 });
