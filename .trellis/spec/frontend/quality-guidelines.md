@@ -54,6 +54,12 @@ The hook may keep the previous SVG while the current request is `rendering`, but
 
 Preview zoom must participate in layout sizing. Do not use `transform: scale(...)` for the rendered Mermaid surface: transforms do not change the scrollable layout area, so enlarged diagrams can be clipped. Apply the percentage with the CSS `zoom` property instead; the SVG's existing `max-width: 100%` and `height: auto` preserve its aspect ratio, while the preview canvas can scroll when enlarged.
 
+### SVG Dimension Parsing Contract
+
+Preview sizing and raster export must use the same SVG dimension parser. Do not keep separate `viewBox`, `width`, or `height` parsing logic in `PreviewPane` and `exportDiagram`; shared parsing prevents preview/export drift when SVGs use comma-separated or mixed-delimiter `viewBox` values.
+
+Raster export may still apply export-specific fallback dimensions when parsing fails, but the first parse attempt should come from the shared utility. Tests for export changes should assert the canvas size and the SVG passed to `Canvg.fromString`.
+
 ## Code Review Checklist
 
 Reviewers should check parent-child prop contracts, editor lifecycle cleanup, external synchronization annotations, accessibility labeling, Frontmatter precedence, local-only persistence, official Mermaid template syntax, preservation of the existing Mermaid render/export flow, and the async Mermaid rendering contract above.

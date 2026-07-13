@@ -1,5 +1,6 @@
 import type { ExportFormat } from "../types";
 import { Canvg } from "canvg";
+import { getSvgDimensionsFromElement } from "./svgDimensions";
 
 type RasterOptions = {
   scale: number;
@@ -111,13 +112,7 @@ function ensureSvgSize(svg: string) {
     throw new Error("没有可导出的 SVG");
   }
 
-  const viewBox = svgElement.getAttribute("viewBox");
-  const dimensions = viewBox
-    ? getDimensionsFromViewBox(viewBox)
-    : {
-        width: readLength(svgElement.getAttribute("width")) ?? 1200,
-        height: readLength(svgElement.getAttribute("height")) ?? 800,
-      };
+  const dimensions = getSvgDimensionsFromElement(svgElement) ?? { width: 1200, height: 800 };
 
   svgElement.setAttribute("xmlns", "http://www.w3.org/2000/svg");
   svgElement.setAttribute("width", String(dimensions.width));
@@ -129,21 +124,4 @@ function ensureSvgSize(svg: string) {
     width: dimensions.width,
     height: dimensions.height,
   };
-}
-
-function getDimensionsFromViewBox(viewBox: string) {
-  const [, , width, height] = viewBox.split(/\s+/).map(Number);
-  return {
-    width: Number.isFinite(width) && width > 0 ? width : 1200,
-    height: Number.isFinite(height) && height > 0 ? height : 800,
-  };
-}
-
-function readLength(value: string | null) {
-  if (!value) {
-    return null;
-  }
-
-  const parsed = Number.parseFloat(value);
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
 }

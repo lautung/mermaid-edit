@@ -4,6 +4,7 @@ import { Alert, Badge, Empty, Spin, Tabs } from "antd";
 import { EyeOutlined, WarningOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
 import { useI18n } from "../i18n/useI18n";
 import type { RenderState } from "../types";
+import { getSvgDimensionsFromMarkup } from "../utils/svgDimensions";
 
 type PreviewPaneProps = {
   svg: string;
@@ -108,7 +109,7 @@ export function PreviewPane({ svg, state, zoom, scale, filename, background }: P
 }
 
 function getPreviewSurfaceSize(svg: string): PreviewSurfaceStyle {
-  const dimensions = getSvgDimensions(svg);
+  const dimensions = getSvgDimensionsFromMarkup(svg);
   if (!dimensions) {
     return {};
   }
@@ -148,32 +149,4 @@ function getPreviewSurfaceSize(svg: string): PreviewSurfaceStyle {
     "--preview-width": `${Math.round(width)}px`,
     "--preview-height": `${Math.round(height)}px`,
   };
-}
-
-function getSvgDimensions(svg: string) {
-  const viewBox = svg.match(/\sviewBox=(["'])(.*?)\1/i)?.[2];
-  if (viewBox) {
-    const [, , width, height] = viewBox.trim().split(/[\s,]+/).map(Number);
-    if (isPositiveNumber(width) && isPositiveNumber(height)) {
-      return { width, height };
-    }
-  }
-
-  const width = readSvgLength(svg, "width");
-  const height = readSvgLength(svg, "height");
-  return isPositiveNumber(width) && isPositiveNumber(height) ? { width, height } : null;
-}
-
-function readSvgLength(svg: string, attribute: "width" | "height") {
-  const value = svg.match(new RegExp(`\\s${attribute}=(["'])(.*?)\\1`, "i"))?.[2];
-  if (!value || value.trim().endsWith("%")) {
-    return null;
-  }
-
-  const parsed = Number.parseFloat(value);
-  return isPositiveNumber(parsed) ? parsed : null;
-}
-
-function isPositiveNumber(value: unknown): value is number {
-  return typeof value === "number" && Number.isFinite(value) && value > 0;
 }
