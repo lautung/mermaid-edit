@@ -898,3 +898,40 @@ Extracted App export actions, template sidebar, and header actions into focused 
 ### Next Steps
 
 - None - task complete
+
+
+## Session 28: Archive Mermaid editor optimization program
+
+**Date**: 2026-07-13
+**Task**: Archive Mermaid editor optimization program
+**Branch**: `main`
+
+### Summary
+
+Archived the parent optimization program after all five child tasks completed: bundle lazy loading, render lifecycle, export edge cases, localStorage settings hardening, and App responsibility split.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `366a13c` | (see git log) |
+| `3ad62f1` | (see git log) |
+| `b033c4c` | (see git log) |
+| `8f4788b` | (see git log) |
+| `48f6a37` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
