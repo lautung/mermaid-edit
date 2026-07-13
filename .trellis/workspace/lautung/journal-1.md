@@ -632,3 +632,36 @@ Completed missing locale coverage for settings and status text, aligned README a
 ### Next Steps
 
 - None - task complete
+
+
+## Session 20: Retry Mermaid chunk load failures
+
+**Date**: 2026-07-13
+**Task**: Retry Mermaid chunk load failures
+**Branch**: `main`
+
+### Summary
+
+Added one automatic retry for Mermaid dynamic chunk load failures while keeping code splitting enabled, then surfaced localized refresh guidance only after the retry also fails.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `38f8469` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
