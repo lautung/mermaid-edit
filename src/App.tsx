@@ -9,6 +9,7 @@ import {
   Input,
   Layout,
   List,
+  Select,
   Space,
   Splitter,
   Tag,
@@ -38,6 +39,11 @@ import { defaultDiagramSettings } from "./data/settings";
 import { useJsonLocalStorage } from "./hooks/useJsonLocalStorage";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useMermaidRenderer } from "./hooks/useMermaidRenderer";
+import { antdLocales } from "./i18n/antdLocales";
+import { I18nProvider } from "./i18n/I18nProvider";
+import { localeOptions } from "./i18n/messages";
+import type { LocaleCode } from "./i18n/types";
+import { useI18n } from "./i18n/useI18n";
 import type { DiagramSettings, ExportFormat } from "./types";
 import { copySvg, downloadMarkdown, downloadRaster, downloadSvg } from "./utils/exportDiagram";
 import { formatMermaidMarkdown } from "./utils/markdownMermaid";
@@ -48,29 +54,36 @@ const { useBreakpoint } = Grid;
 
 const chartTypes = Array.from(new Set(diagramTemplates.map((template) => template.type)));
 export function App() {
+  const [storedLocale, setStoredLocale] = useLocalStorage("mermaid-edit:locale", "zh-CN");
+  const locale = isLocaleCode(storedLocale) ? storedLocale : "zh-CN";
+
   return (
-    <ConfigProvider
-      theme={{
-        algorithm: antTheme.defaultAlgorithm,
-        token: {
-          colorPrimary: "#0f8f82",
-          borderRadius: 8,
-          fontFamily:
-            "Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
-          fontFamilyCode:
-            "SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace",
-        },
-      }}
-    >
-      <AntApp>
-        <MermaidEditorApp />
-      </AntApp>
-    </ConfigProvider>
+    <I18nProvider locale={locale} onLocaleChange={setStoredLocale}>
+      <ConfigProvider
+        locale={antdLocales[locale]}
+        theme={{
+          algorithm: antTheme.defaultAlgorithm,
+          token: {
+            colorPrimary: "#0f8f82",
+            borderRadius: 8,
+            fontFamily:
+              "Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
+            fontFamilyCode:
+              "SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace",
+          },
+        }}
+      >
+        <AntApp>
+          <MermaidEditorApp />
+        </AntApp>
+      </ConfigProvider>
+    </I18nProvider>
   );
 }
 
 function MermaidEditorApp() {
   const { message } = AntApp.useApp();
+  const { locale, setLocale, messages, templateText, diagnosticMessages } = useI18n();
   const screens = useBreakpoint();
   const isCompact = !screens.md;
   const [source, setSource] = useLocalStorage("mermaid-edit:source", initialDiagram);
@@ -84,26 +97,48 @@ function MermaidEditorApp() {
   const [selectedType, setSelectedType] = useState(chartTypes[0]);
   const [search, setSearch] = useState("");
   const [markdownImportOpen, setMarkdownImportOpen] = useState(false);
-  const { svg, state } = useMermaidRenderer(source, settings);
+  const rendererLocale = useMemo(
+    () => ({
+      diagnostics: diagnosticMessages,
+      render: messages.render,
+    }),
+    [diagnosticMessages, messages.render],
+  );
+  const { svg, state } = useMermaidRenderer(source, settings, rendererLocale);
   const canExport = state.status === "ready" && Boolean(svg);
   const statusMessage = state.status === "error" && state.diagnostic ? state.diagnostic.summary : state.message;
+  const localizedTemplates = useMemo(
+    () =>
+      diagramTemplates.map((template) => ({
+        ...template,
+        text: templateText(template.id, template),
+      })),
+    [templateText],
+  );
+  const chartTypeLabels = useMemo(() => {
+    const labels = new Map<string, string>();
+    localizedTemplates.forEach((template) => {
+      labels.set(template.type, template.text.type);
+    });
+    return labels;
+  }, [localizedTemplates]);
 
   const filteredTemplates = useMemo(
     () =>
-      diagramTemplates.filter((template) => {
+      localizedTemplates.filter((template) => {
         const matchesType = template.type === selectedType;
         const keyword = search.trim().toLowerCase();
         const matchesSearch =
           !keyword ||
-          template.title.toLowerCase().includes(keyword) ||
-          template.tags.some((tag) => tag.toLowerCase().includes(keyword));
+          template.text.title.toLowerCase().includes(keyword) ||
+          template.text.tags.some((tag) => tag.toLowerCase().includes(keyword));
 
         return matchesType && matchesSearch;
       }),
-    [search, selectedType],
+    [localizedTemplates, search, selectedType],
   );
 
-  const activeTemplate = diagramTemplates.find((template) => template.source === source);
+  const activeTemplate = localizedTemplates.find((template) => template.source === source);
 
   const handleExport = async (format: ExportFormat) => {
     if (!svg) {
@@ -119,9 +154,9 @@ function MermaidEditorApp() {
           background: settings.background,
         });
       }
-      message.success(`已导出 ${format.toUpperCase()}`);
+      message.success(messages.feedback.exported(format.toUpperCase()));
     } catch (error) {
-      message.error(error instanceof Error ? error.message : "导出失败");
+      message.error(error instanceof Error ? error.message : messages.feedback.exportFailed);
     }
   };
 
@@ -130,7 +165,7 @@ function MermaidEditorApp() {
       formatMermaidMarkdown(source),
       `${filename.trim() || "mermaid-diagram"}.md`,
     );
-    message.success("Markdown 已导出");
+    message.success(messages.feedback.markdownExported);
   };
 
   const handleCopySvg = async () => {
@@ -140,9 +175,9 @@ function MermaidEditorApp() {
 
     try {
       await copySvg(svg);
-      message.success("SVG 已复制到剪贴板");
+      message.success(messages.feedback.svgCopied);
     } catch {
-      message.error("复制失败，请改用导出 SVG");
+      message.error(messages.feedback.copyFailed);
     }
   };
 
@@ -154,34 +189,34 @@ function MermaidEditorApp() {
 
     setSource(template.source);
     setSelectedType(template.type);
-    message.success(`${template.title} 已载入`);
+    message.success(messages.feedback.templateLoaded(templateText(template.id, template).title));
   };
 
   const exportItems: MenuProps["items"] = [
     {
       key: "svg",
-      label: "导出为 SVG",
+      label: messages.header.exportSvg,
       icon: <FileTextOutlined />,
       disabled: !canExport,
       onClick: () => void handleExport("svg"),
     },
     {
       key: "png",
-      label: "导出为 PNG",
+      label: messages.header.exportPng,
       icon: <FileImageOutlined />,
       disabled: !canExport,
       onClick: () => void handleExport("png"),
     },
     {
       key: "jpg",
-      label: "导出为 JPG",
+      label: messages.header.exportJpg,
       icon: <PictureOutlined />,
       disabled: !canExport,
       onClick: () => void handleExport("jpg"),
     },
     {
       key: "markdown",
-      label: "导出为 Markdown",
+      label: messages.header.exportMarkdown,
       icon: <FileTextOutlined />,
       disabled: !source.trim(),
       onClick: handleExportMarkdown,
@@ -199,20 +234,20 @@ function MermaidEditorApp() {
     <Layout className="appShell">
       <Sider className="templateSider" width={268} theme="light" breakpoint="lg" collapsedWidth={0}>
         <div className="siderHeader">
-          <Title level={4}>模板库</Title>
+          <Title level={4}>{messages.sider.libraryTitle}</Title>
           <Input
             allowClear
             prefix={<SearchOutlined />}
-            placeholder="搜索模板"
+            placeholder={messages.sider.searchPlaceholder}
             value={search}
             onChange={(event) => setSearch(event.target.value)}
           />
         </div>
 
         <Text className="siderSectionTitle" type="secondary">
-          图表类型
+          {messages.sider.chartTypes}
         </Text>
-        <div className="templateTypeGrid" role="group" aria-label="图表类型">
+        <div className="templateTypeGrid" role="group" aria-label={messages.sider.chartTypes}>
           {chartTypes.map((type) => (
             <button
               key={type}
@@ -221,18 +256,18 @@ function MermaidEditorApp() {
               aria-pressed={type === selectedType}
               onClick={() => setSelectedType(type)}
             >
-              {type}
+              {chartTypeLabels.get(type) ?? type}
             </button>
           ))}
         </div>
 
         <Text className="siderSectionTitle" type="secondary">
-          模板列表
+          {messages.sider.templateList}
         </Text>
         <List
           className="templateList"
           dataSource={filteredTemplates}
-          locale={{ emptyText: "没有匹配的模板" }}
+          locale={{ emptyText: messages.sider.emptyTemplates }}
           renderItem={(item) => (
             <List.Item
               className="templateItem"
@@ -242,10 +277,10 @@ function MermaidEditorApp() {
                 <PictureOutlined />
               </div>
               <div className="templateMeta">
-                <Text strong>{item.title}</Text>
+                <Text strong>{item.text.title}</Text>
                 <Space size={[4, 4]} wrap>
-                  {item.tags.map((tag) => (
-                    <Tag key={tag} color={tag === "常用" ? "green" : "blue"}>
+                  {item.text.tags.map((tag, index) => (
+                    <Tag key={tag} color={index === 0 ? "green" : "blue"}>
                       {tag}
                     </Tag>
                   ))}
@@ -256,7 +291,7 @@ function MermaidEditorApp() {
         />
 
         <Button className="manageTemplateButton" icon={<SettingOutlined />} block>
-          管理模板
+          {messages.sider.manageTemplates}
         </Button>
       </Sider>
 
@@ -264,22 +299,31 @@ function MermaidEditorApp() {
         <Header className="appHeader">
           <Space align="center" size={12}>
             <div className="brandMark">M</div>
-            <Title level={3}>Mermaid 在线编辑器</Title>
-            <Tag color="cyan">浏览器本地处理</Tag>
+            <Title level={3}>{messages.app.title}</Title>
+            <Tag color="cyan">{messages.app.localTag}</Tag>
             <Badge status={canExport ? "success" : state.status === "error" ? "error" : "processing"} />
-            <Text type="secondary">{canExport ? "已保存" : statusMessage}</Text>
+            <Text type="secondary">{canExport ? messages.app.saved : statusMessage}</Text>
           </Space>
 
           <Space className="headerActions">
+            <Select
+              aria-label={messages.language.label}
+              value={locale}
+              options={localeOptions.map((option) => ({
+                value: option.value,
+                label: option.nativeLabel,
+              }))}
+              onChange={(nextLocale) => setLocale(nextLocale as LocaleCode)}
+            />
             <Button icon={<CopyOutlined />} disabled={!canExport} onClick={handleCopySvg}>
-              复制 SVG
+              {messages.header.copySvg}
             </Button>
             <Dropdown menu={{ items: exportItems }} trigger={["click"]}>
               <Button type="primary" icon={<DownloadOutlined />} disabled={!canExport}>
-                导出
+                {messages.common.export}
               </Button>
             </Dropdown>
-            <Tooltip title="恢复默认模板">
+            <Tooltip title={messages.header.resetTemplateTooltip}>
               <Button icon={<ReloadOutlined />} onClick={() => handleTemplateSelect("flow-basic")} />
             </Tooltip>
             <Button icon={<MenuOutlined />} />
@@ -291,12 +335,14 @@ function MermaidEditorApp() {
             <Badge status="success" />
             <div>
               <Text strong>
-                {activeTemplate ? `${activeTemplate.title} 已载入` : "正在编辑自定义图表"}
+                {activeTemplate
+                  ? messages.app.loadedTemplate(activeTemplate.text.title)
+                  : messages.app.customDiagram}
               </Text>
               <Text type="secondary">
                 {activeTemplate
-                  ? "已为您加载基础模板，您可以在左侧模板库中切换其他模板。"
-                  : "当前内容来自本地保存，选择左侧模板可快速替换。"}
+                  ? messages.app.loadedTemplateDescription
+                  : messages.app.customDiagramDescription}
               </Text>
             </div>
           </div>
@@ -364,9 +410,13 @@ function MermaidEditorApp() {
         onClose={() => setMarkdownImportOpen(false)}
         onImport={(nextSource) => {
           setSource(nextSource);
-          message.success("Mermaid 代码已从 Markdown 载入");
+          message.success(messages.feedback.markdownImported);
         }}
       />
     </Layout>
   );
+}
+
+function isLocaleCode(value: string): value is LocaleCode {
+  return localeOptions.some((option) => option.value === value);
 }

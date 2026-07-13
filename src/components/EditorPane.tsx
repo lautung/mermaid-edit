@@ -1,6 +1,7 @@
 import { Alert, Tabs, Typography } from "antd";
 import { CodeOutlined, ImportOutlined } from "@ant-design/icons";
 import { useRef } from "react";
+import { useI18n } from "../i18n/useI18n";
 import type { RenderState } from "../types";
 import { MermaidCodeEditor } from "./MermaidCodeEditor";
 import type { MermaidCodeEditorHandle } from "./MermaidCodeEditor";
@@ -14,15 +15,16 @@ type EditorPaneProps = {
 };
 
 export function EditorPane({ value, renderState, onChange, onOpenMarkdownImport }: EditorPaneProps) {
+  const { messages } = useI18n();
   const editorRef = useRef<MermaidCodeEditorHandle>(null);
   const lineCount = value.split("\n").length;
   const diagnostic = renderState.status === "error" ? renderState.diagnostic : undefined;
   const statusType = renderState.status === "error" ? "error" : "success";
   const statusMessage =
-    renderState.status === "error" ? "语法检查未通过" : "语法检查通过，图表渲染正常。";
+    renderState.status === "error" ? messages.editor.syntaxFailed : messages.editor.syntaxPassed;
 
   return (
-    <section className="workspacePanel editorPane" aria-label="Mermaid 代码编辑器">
+    <section className="workspacePanel editorPane" aria-label={messages.editor.ariaLabel}>
       <Tabs
         className="panelTabs"
         activeKey="code"
@@ -36,7 +38,7 @@ export function EditorPane({ value, renderState, onChange, onOpenMarkdownImport 
             key: "code",
             label: (
               <span>
-                <CodeOutlined /> 代码
+                <CodeOutlined /> {messages.editor.codeTab}
               </span>
             ),
             children: null,
@@ -45,14 +47,19 @@ export function EditorPane({ value, renderState, onChange, onOpenMarkdownImport 
             key: "markdown",
             label: (
               <span>
-                <ImportOutlined /> Markdown 导入
+                <ImportOutlined /> {messages.editor.markdownTab}
               </span>
             ),
             children: null,
           },
         ]}
       />
-      <MermaidCodeEditor ref={editorRef} value={value} onChange={onChange} />
+      <MermaidCodeEditor
+        ref={editorRef}
+        value={value}
+        ariaLabel={messages.editor.codeEditorAriaLabel}
+        onChange={onChange}
+      />
       <div className={diagnostic ? "editorFooter editorFooterWithAssistant" : "editorFooter"}>
         {diagnostic ? (
           <SyntaxAssistant
@@ -68,7 +75,7 @@ export function EditorPane({ value, renderState, onChange, onOpenMarkdownImport 
           <Alert showIcon type={statusType} title={statusMessage} banner />
         )}
         <Typography.Text type="secondary">
-          行 {lineCount}，长度 {value.length}
+          {messages.editor.lineLength(lineCount, value.length)}
         </Typography.Text>
       </div>
     </section>

@@ -1,5 +1,6 @@
 import { Badge, Space, Tag, Typography } from "antd";
 import { LockOutlined } from "@ant-design/icons";
+import { useI18n } from "../i18n/useI18n";
 import type { RenderState } from "../types";
 
 type StatusBarProps = {
@@ -9,6 +10,7 @@ type StatusBarProps = {
 };
 
 export function StatusBar({ renderState, sourceLength, zoom }: StatusBarProps) {
+  const { messages } = useI18n();
   const statusMessage =
     renderState.status === "error" && renderState.diagnostic
       ? renderState.diagnostic.summary
@@ -26,11 +28,11 @@ export function StatusBar({ renderState, sourceLength, zoom }: StatusBarProps) {
     <footer className="statusBar">
       <Space size={18} wrap>
         <Badge status={badgeStatus} text={statusMessage} />
-        <Typography.Text type="secondary">{sourceLength} 字符</Typography.Text>
-        <Typography.Text type="secondary">预览缩放 {zoom}%</Typography.Text>
+        <Typography.Text type="secondary">{messages.status.characters(sourceLength)}</Typography.Text>
+        <Typography.Text type="secondary">{messages.status.previewZoom(zoom)}</Typography.Text>
       </Space>
       <Tag icon={<LockOutlined />} color="default">
-        所有处理在浏览器本地完成，不会上传数据
+        {messages.status.privacy}
       </Tag>
     </footer>
   );
