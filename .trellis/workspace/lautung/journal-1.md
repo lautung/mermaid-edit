@@ -302,3 +302,36 @@ Replaced the native Mermaid source textarea with a controlled CodeMirror 6 edito
 ### Next Steps
 
 - None - task complete
+
+
+## Session 10: Fix Mermaid preview connector strokes
+
+**Date**: 2026-07-13
+**Task**: Fix Mermaid preview connector strokes
+**Branch**: `main`
+
+### Summary
+
+Prevent transparent preview backgrounds from being passed into Mermaid theme variables so connector strokes and arrow markers remain visible; added a regression test and validated tests, lint, and build.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `5f8e391` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 9
-- **Last Active**: 2026-07-12
+- **Total Sessions**: 10
+- **Last Active**: 2026-07-13
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~304 | Active |
+| `journal-1.md` | ~337 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 10 | 2026-07-13 | Fix Mermaid preview connector strokes | `5f8e391` | `main` |
 | 9 | 2026-07-12 | 修复 Mermaid 预览缩放 | `c2d59fb` | `main` |
 | 8 | 2026-07-12 | 实现 Mermaid 语法修复助手 | `7ee824f` | `main` |
 | 7 | 2026-07-12 | 升级 Trellis CLI 与项目 skills | `621303f` | `main` |
