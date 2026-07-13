@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 15
+- **Total Sessions**: 16
 - **Last Active**: 2026-07-13
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~502 | Active |
+| `journal-1.md` | ~535 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 16 | 2026-07-13 | Refresh Mermaid editor docs and specs | `0ae8326` | `main` |
 | 15 | 2026-07-13 | Fix Mermaid editor cursor visibility | `bc18f7b` | `main` |
 | 14 | 2026-07-13 | Fix brand icon rendering | `2cb6951` | `main` |
 | 13 | 2026-07-13 | Wire template manager button | `b1f9e1c` | `main` |

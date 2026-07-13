@@ -500,3 +500,36 @@ Made the CodeMirror cursor visible on the dark Mermaid editor surface and added 
 ### Next Steps
 
 - None - task complete
+
+
+## Session 16: Refresh Mermaid editor docs and specs
+
+**Date**: 2026-07-13
+**Task**: Refresh Mermaid editor docs and specs
+**Branch**: `main`
+
+### Summary
+
+Updated README and AGENTS with current Mermaid editor facts, added live desktop/mobile screenshots, refreshed frontend Trellis specs, removed stale backend specs, and wrote a memory update note.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `0ae8326` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
