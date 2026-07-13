@@ -536,11 +536,10 @@ input {
   gap: 12px;
 }
 
-.zoomStepper,
-.zoomRange {
-  display: flex;
+.zoomStepper {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) 32px;
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
   margin-top: 8px;
 }
@@ -548,6 +547,12 @@ input {
 .zoomStepper .ant-btn {
   width: 32px;
   padding: 0;
+}
+
+.zoomStepper .ant-typography {
+  min-width: 4ch;
+  justify-self: center;
+  text-align: center;
 }
 
 .statusBar {
