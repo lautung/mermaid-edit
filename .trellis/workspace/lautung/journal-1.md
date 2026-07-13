@@ -970,3 +970,36 @@ Added React Router library-mode shell, URL-backed lightweight editor view state,
 ### Next Steps
 
 - None - task complete
+
+
+## Session 30: Upgrade React Router Framework Mode
+
+**Date**: 2026-07-14
+**Task**: Upgrade React Router Framework Mode
+**Branch**: `main`
+
+### Summary
+
+Upgraded the Mermaid editor to React Router 8 Framework Mode SPA with React 19, Vite 8, TypeScript 6, updated entry/config files, refreshed the upgrade plan, and verified tests, lint, build, plus desktop and mobile browser smoke checks.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `11fc3d4` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
