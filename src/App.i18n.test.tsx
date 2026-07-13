@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import mermaid from "mermaid";
 import type { ParseResult } from "mermaid";
 import { App } from "./App";
+import { messages } from "./i18n/messages";
 
 vi.mock("mermaid", () => ({
   default: {
@@ -138,4 +139,24 @@ describe("App internationalization", () => {
     expect(await screen.findByRole("heading", { name: "Mermaid Online Editor" })).not.toBeNull();
     expect(screen.getByLabelText("Enter Mermaid code")).not.toBeNull();
   });
+
+  test.each([
+    ["ja", "図の設定", "テーマ", "プレビュー倍率 100%", "レンダリング完了"],
+    ["ko", "다이어그램 설정", "테마", "미리보기 확대 100%", "렌더링 완료"],
+    ["ru", "Настройки диаграммы", "Тема", "Масштаб предпросмотра 100%", "Рендеринг завершен"],
+  ] as const)(
+    "localizes %s settings and status text without falling back to Chinese",
+    (locale, settingsTitle, themeLabel, previewZoom, renderReady) => {
+      const localized = messages[locale];
+
+      expect(localized.settings.title).toBe(settingsTitle);
+      expect(localized.settings.fields.theme).toBe(themeLabel);
+      expect(localized.status.previewZoom(100)).toBe(previewZoom);
+      expect(localized.render.ready).toBe(renderReady);
+
+      expect(localized.settings.title).not.toBe(messages["zh-CN"].settings.title);
+      expect(localized.status.privacy).not.toBe(messages["zh-CN"].status.privacy);
+      expect(localized.render.ready).not.toBe(messages["zh-CN"].render.ready);
+    },
+  );
 });
