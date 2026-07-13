@@ -1036,3 +1036,36 @@ Configured Vercel to publish React Router Framework output from build/client, ig
 ### Next Steps
 
 - None - task complete
+
+
+## Session 32: Fix stable route type keys
+
+**Date**: 2026-07-14
+**Task**: Fix stable route type keys
+**Branch**: `main`
+
+### Summary
+
+Changed Mermaid template category URL state to use stable ASCII type keys while keeping localized labels for display. Verified with tests, lint, and build before commit.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `0ac5b49` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
