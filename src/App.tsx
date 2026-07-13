@@ -280,6 +280,8 @@ function isLocaleCode(value: string): value is LocaleCode {
   return localeOptions.some((option) => option.value === value);
 }
 
+export default App;
+
 function detectBrowserLocale(): LocaleCode {
   const browserLanguages = navigator.languages.length > 0 ? navigator.languages : [navigator.language];
 

@@ -1,8 +1,8 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import { reactRouter } from "@react-router/dev/vite";
 
-export default defineConfig({
-  plugins: [react()],
+export default defineConfig(({ mode }) => ({
+  plugins: mode === "test" ? [] : [reactRouter()],
   build: {
     outDir: "dist",
     rollupOptions: {
@@ -39,7 +39,7 @@ export default defineConfig({
       },
     },
   },
-});
+}));
 
 function isPackagePath(id: string, packagePath: string) {
   return id.indexOf(packagePath) !== -1;

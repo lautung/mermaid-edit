@@ -14,9 +14,9 @@
 - `react-dom@19.2.7`
 - `vite@8.1.4`
 - `@vitejs/plugin-react@6.0.3`
-- `typescript@7.0.2`
+- `typescript@6.0.3`
 
-关键判断：React Router 8 不能在当前项目的 React 18 / Vite 5 基线上直接升级。必须先升级 React、ReactDOM、Vite 和相关测试/构建工具链，再切换 React Router Framework Mode。
+关键判断：React Router 8 不能在当前项目的 React 18 / Vite 5 基线上直接升级。必须先升级 React、ReactDOM、Vite 和相关测试/构建工具链，再切换 React Router Framework Mode。虽然 npm 的 TypeScript 最新标签是 7.x，但当前 React Router 8 和 TypeScript ESLint 的兼容交集是 TypeScript 6.x，因此本项目实施时使用 `typescript@6.0.3`。
 
 本项目仍应保持静态前端 SPA 边界：不引入后端服务、数据库、登录态、服务端导出、远程同步或服务端 API。Framework Mode 只用于官方路由框架入口、类型生成和未来 route-level code splitting；运行模式应继续使用 `ssr: false`。
 
@@ -73,7 +73,7 @@
     "@types/react-dom": "^19.2.17",
     "@vitejs/plugin-react": "^6.0.3",
     "vite": "^8.1.4",
-    "typescript": "^7.0.2"
+    "typescript": "^6.0.3"
   }
 }
 ```
@@ -106,7 +106,7 @@ npm run build
 }
 ```
 
-`@react-router/node`、`@react-router/serve`、`isbot` 不应主动加入生产依赖，除非 React Router 8 的实际构建流程明确要求，且我们确认不会改变部署边界。若插件仍要求 server runtime，应优先使用自定义最小 `entry.server.tsx` 或官方 SPA 推荐路径，而不是引入服务端部署假设。
+`@react-router/node`、`@react-router/serve` 不应主动加入生产依赖，除非 React Router 8 的实际构建流程明确要求，且我们确认不会改变部署边界。实际实施中，React Router 8 的默认 server entry 会在 SPA build 阶段要求 `isbot@5`；显式保留 `isbot` 可以避免 `react-router build` 在构建过程中自动修改 `package.json` 并触发 npm install。
 
 建议配置：
 
@@ -189,6 +189,7 @@ export default App;
 - `.gitignore` 加入 `build` 和 `.react-router`。
 - `eslint.config.js` ignore 加入 `build` 和 `.react-router`。
 - `tsconfig.node.json` include 加入 `react-router.config.ts`。
+- `src/vite-env.d.ts` 加入 `/// <reference types="vite/client" />`，让 TypeScript 6 能识别 CSS side-effect imports。
 
 验收：
 
@@ -249,4 +250,4 @@ npm run build
 - React Router 官方 `react-router.config.ts`：`ssr` 可设为 `false` 以预渲染 SPA。https://reactrouter.com/api/framework-conventions/react-router.config.ts
 - React Router 官方 component routes 升级文档：Framework Mode 使用 React Router Vite 插件替代普通 React 插件。https://reactrouter.com/upgrading/component-routes
 - React Router 官方 routes 配置：`routes.ts` 使用 `index`、`route`、`layout` 等 helper。https://reactrouter.com/start/framework/routing
-- npm package metadata：`react-router@8.2.0`、`@react-router/dev@8.2.0`、`vite@8.1.4`、`@vitejs/plugin-react@6.0.3`、`react@19.2.7`、`react-dom@19.2.7`。
+- npm package metadata：`react-router@8.2.0`、`@react-router/dev@8.2.0`、`vite@8.1.4`、`@vitejs/plugin-react@6.0.3`、`react@19.2.7`、`react-dom@19.2.7`、`typescript@6.0.3`。
