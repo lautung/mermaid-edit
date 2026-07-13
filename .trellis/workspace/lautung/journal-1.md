@@ -1102,3 +1102,36 @@ Silenced the Vite large chunk warning by lazy-loading ELK layout support and set
 ### Next Steps
 
 - None - task complete
+
+
+## Session 34: 修复预览缩放控件居中
+
+**Date**: 2026-07-14
+**Task**: 修复预览缩放控件居中
+**Branch**: `main`
+
+### Summary
+
+修复预览缩放 slider 的 100% 中心语义和当前值居中显示；完成测试、lint、build 与 Chrome 几何验证。
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `2dbd6af` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
