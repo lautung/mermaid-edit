@@ -20,6 +20,15 @@ describe("MermaidCodeEditor", () => {
     expect(container.querySelector(".cm-content")?.getAttribute("spellcheck")).toBe("false");
   });
 
+  test("uses a visible cursor color on the dark editor surface", () => {
+    const source = "flowchart LR\n  A --> B";
+    const { container } = render(<MermaidCodeEditor value={source} onChange={vi.fn()} />);
+
+    expect(document.head.textContent).toContain(".cm-cursor");
+    expect(document.head.textContent).toContain("border-left-color: #64d8cb");
+    expect(container.querySelector(".cm-content")).not.toBeNull();
+  });
+
   test("reports real document changes through onChange", () => {
     const source = "flowchart LR\n  A --> B";
     const nextSource = "flowchart TD\n  A --> C";

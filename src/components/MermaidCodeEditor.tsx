@@ -31,6 +31,10 @@ const editorTheme = EditorView.theme({
     padding: "18px 20px",
     caretColor: "#64d8cb",
   },
+  ".cm-cursor": {
+    borderLeftColor: "#64d8cb",
+    borderLeftWidth: "2px",
+  },
   ".cm-gutters": {
     border: "none",
     backgroundColor: "#151d21",
