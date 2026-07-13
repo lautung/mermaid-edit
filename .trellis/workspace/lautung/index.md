@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 13
+- **Total Sessions**: 14
 - **Last Active**: 2026-07-13
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~436 | Active |
+| `journal-1.md` | ~469 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 14 | 2026-07-13 | Fix brand icon rendering | `2cb6951` | `main` |
 | 13 | 2026-07-13 | Wire template manager button | `b1f9e1c` | `main` |
 | 12 | 2026-07-13 | Fix template sidebar visibility | `6b79f41` | `main` |
 | 11 | 2026-07-13 | Normalize Mermaid preview sizing | `fb216a0` | `main` |

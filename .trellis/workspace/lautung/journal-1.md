@@ -434,3 +434,36 @@ Connected the sidebar Manage Templates button to a searchable template managemen
 ### Next Steps
 
 - None - task complete
+
+
+## Session 14: Fix brand icon rendering
+
+**Date**: 2026-07-13
+**Task**: Fix brand icon rendering
+**Branch**: `main`
+
+### Summary
+
+Replaced the text-based header brand mark with the existing SVG favicon and adjusted the CSS so the icon renders without font baseline clipping. Verified with lint, build, tests, and a Chrome screenshot.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `2cb6951` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
