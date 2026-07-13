@@ -6,7 +6,7 @@ import tsParser from "@typescript-eslint/parser";
 
 export default [
   {
-    ignores: ["dist", "vite.config.d.ts"],
+    ignores: ["build", "dist", ".react-router", "vite.config.d.ts"],
   },
   js.configs.recommended,
   {
