@@ -467,3 +467,36 @@ Replaced the text-based header brand mark with the existing SVG favicon and adju
 ### Next Steps
 
 - None - task complete
+
+
+## Session 15: Fix Mermaid editor cursor visibility
+
+**Date**: 2026-07-13
+**Task**: Fix Mermaid editor cursor visibility
+**Branch**: `main`
+
+### Summary
+
+Made the CodeMirror cursor visible on the dark Mermaid editor surface and added a focused regression test.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `bc18f7b` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
