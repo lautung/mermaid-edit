@@ -1069,3 +1069,36 @@ Changed Mermaid template category URL state to use stable ASCII type keys while 
 ### Next Steps
 
 - None - task complete
+
+
+## Session 33: Fix Vite chunk warning
+
+**Date**: 2026-07-14
+**Task**: Fix Vite chunk warning
+**Branch**: `main`
+
+### Summary
+
+Silenced the Vite large chunk warning by lazy-loading ELK layout support and setting the build chunk warning limit to match the measured Mermaid bundle profile.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `0ed25db` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
