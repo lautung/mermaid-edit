@@ -1,5 +1,4 @@
 import type { ExportFormat } from "../types";
-import { Canvg } from "canvg";
 import { getSvgDimensionsFromElement } from "./svgDimensions";
 
 type RasterOptions = {
@@ -63,6 +62,7 @@ function sanitizeFilename(filename?: string) {
 }
 
 async function svgToRasterBlob(svg: string, options: RasterOptions) {
+  const { Canvg } = await import("canvg");
   const preparedSvg = ensureSvgSize(svg);
   const canvas = document.createElement("canvas");
   const width = Math.ceil(preparedSvg.width * options.scale);

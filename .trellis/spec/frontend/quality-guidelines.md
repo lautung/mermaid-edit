@@ -60,6 +60,14 @@ Preview sizing and raster export must use the same SVG dimension parser. Do not 
 
 Raster export may still apply export-specific fallback dimensions when parsing fails, but the first parse attempt should come from the shared utility. Tests for export changes should assert the canvas size and the SVG passed to `Canvg.fromString`.
 
+### Build Chunking Contract
+
+Use dynamic imports for browser-only heavy paths that are not needed for initial editing, such as raster export. `canvg` belongs inside the PNG/JPG export path, while SVG and Markdown export should not load it.
+
+When adding Vite `manualChunks`, group only stable dependency families with clear ownership, such as Ant Design, CodeMirror, and raster export dependencies. Do not force all `mermaid` or `@mermaid-js` modules into one manual chunk: Mermaid already emits many dynamic diagram chunks, and collapsing them can turn the render path into a much larger bundle.
+
+If a dependency family has its own dynamic loading strategy, prefer leaving it to Rollup/Vite unless a measured build output proves the manual split is better.
+
 ## Code Review Checklist
 
 Reviewers should check parent-child prop contracts, editor lifecycle cleanup, external synchronization annotations, accessibility labeling, Frontmatter precedence, local-only persistence, official Mermaid template syntax, preservation of the existing Mermaid render/export flow, and the async Mermaid rendering contract above.
