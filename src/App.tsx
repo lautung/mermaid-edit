@@ -33,6 +33,7 @@ import { MarkdownImportModal } from "./components/MarkdownImportModal";
 import { PreviewPane } from "./components/PreviewPane";
 import { SettingsPanel } from "./components/SettingsPanel";
 import { StatusBar } from "./components/StatusBar";
+import { TemplateManagerModal } from "./components/TemplateManagerModal";
 import { diagramTemplates, initialDiagram } from "./data/examples";
 import { defaultDiagramSettings } from "./data/settings";
 import { useJsonLocalStorage } from "./hooks/useJsonLocalStorage";
@@ -84,6 +85,7 @@ function MermaidEditorApp() {
   const [selectedType, setSelectedType] = useState(chartTypes[0]);
   const [search, setSearch] = useState("");
   const [markdownImportOpen, setMarkdownImportOpen] = useState(false);
+  const [templateManagerOpen, setTemplateManagerOpen] = useState(false);
   const { svg, state } = useMermaidRenderer(source, settings);
   const canExport = state.status === "ready" && Boolean(svg);
   const statusMessage = state.status === "error" && state.diagnostic ? state.diagnostic.summary : state.message;
@@ -255,7 +257,12 @@ function MermaidEditorApp() {
           )}
         />
 
-        <Button className="manageTemplateButton" icon={<SettingOutlined />} block>
+        <Button
+          className="manageTemplateButton"
+          icon={<SettingOutlined />}
+          block
+          onClick={() => setTemplateManagerOpen(true)}
+        >
           管理模板
         </Button>
       </Sider>
@@ -366,6 +373,14 @@ function MermaidEditorApp() {
           setSource(nextSource);
           message.success("Mermaid 代码已从 Markdown 载入");
         }}
+      />
+      <TemplateManagerModal
+        open={templateManagerOpen}
+        templates={diagramTemplates}
+        chartTypes={chartTypes}
+        activeTemplateId={activeTemplate?.id}
+        onClose={() => setTemplateManagerOpen(false)}
+        onSelectTemplate={handleTemplateSelect}
       />
     </Layout>
   );
