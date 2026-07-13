@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 35 | 2026-07-14 | Make preview tabs functional | `26ab654` | `main` |
 | 34 | 2026-07-14 | 修复预览缩放控件居中 | `2dbd6af` | `main` |
 | 33 | 2026-07-14 | Fix Vite chunk warning | `0ed25db` | `main` |
 | 32 | 2026-07-14 | Fix stable route type keys | `0ac5b49` | `main` |

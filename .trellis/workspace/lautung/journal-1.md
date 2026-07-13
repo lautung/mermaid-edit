@@ -1135,3 +1135,36 @@ Silenced the Vite large chunk warning by lazy-loading ELK layout support and set
 ### Next Steps
 
 - None - task complete
+
+
+## Session 35: Make preview tabs functional
+
+**Date**: 2026-07-14
+**Task**: Make preview tabs functional
+**Branch**: `main`
+
+### Summary
+
+Converted preview, export check, and error tabs into distinct functional panels with localized copy, tests, and browser verification.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `26ab654` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
