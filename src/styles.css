@@ -336,14 +336,17 @@ input {
 }
 
 .svgSurface {
-  max-width: 100%;
+  width: var(--preview-width, fit-content);
+  height: var(--preview-height, auto);
+  max-width: none;
   transition: zoom 180ms ease;
 }
 
 .svgSurface svg {
   display: block;
-  max-width: 100%;
-  height: auto;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
   border-radius: 8px;
   background: transparent;
   box-shadow: 0 18px 42px rgb(21 40 36 / 10%);

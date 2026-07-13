@@ -28,7 +28,40 @@ describe("PreviewPane", () => {
     const surface = container.querySelector<HTMLElement>(".svgSurface");
     expect(surface).not.toBeNull();
     expect(surface?.style.zoom).toBe("200%");
+    expect(surface?.style.getPropertyValue("--preview-width")).toBe("1040px");
+    expect(surface?.style.getPropertyValue("--preview-height")).toBe("260px");
     expect(surface?.style.transform).toBe("");
+  });
+
+  test("normalizes unusually wide and tall template previews without distorting their aspect ratio", () => {
+    const { container, rerender } = render(
+      <PreviewPane
+        svg="<svg viewBox='0 0 1026 62'><rect width='1026' height='62' /></svg>"
+        state={{ status: "ready", message: "渲染完成" }}
+        zoom={100}
+        scale={2}
+        filename="diagram"
+        background="transparent"
+      />,
+    );
+
+    const surface = container.querySelector<HTMLElement>(".svgSurface");
+    expect(surface?.style.getPropertyValue("--preview-width")).toBe("1800px");
+    expect(surface?.style.getPropertyValue("--preview-height")).toBe("109px");
+
+    rerender(
+      <PreviewPane
+        svg="<svg viewBox='0 0 158.125 787.75'><rect width='158.125' height='787.75' /></svg>"
+        state={{ status: "ready", message: "渲染完成" }}
+        zoom={100}
+        scale={2}
+        filename="diagram"
+        background="transparent"
+      />,
+    );
+
+    expect(surface?.style.getPropertyValue("--preview-width")).toBe("112px");
+    expect(surface?.style.getPropertyValue("--preview-height")).toBe("560px");
   });
 
   test("keeps syntax repair guidance in the editor instead of duplicating raw errors", () => {
