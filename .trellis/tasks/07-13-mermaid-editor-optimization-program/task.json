@@ -1,0 +1,32 @@
+{
+  "id": "mermaid-editor-optimization-program",
+  "name": "mermaid-editor-optimization-program",
+  "title": "Mermaid editor optimization program",
+  "description": "Plan and coordinate the optimization work from docs/optimization-research.md across independently verifiable child tasks.",
+  "status": "planning",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P0",
+  "creator": "lautung",
+  "assignee": "lautung",
+  "createdAt": "2026-07-13",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [
+    "07-13-optimize-render-lifecycle",
+    "07-13-harden-local-storage-settings",
+    "07-13-optimize-bundle-lazy-loading",
+    "07-13-harden-export-edge-cases",
+    "07-13-split-app-component-responsibilities"
+  ],
+  "parent": null,
+  "relatedFiles": [],
+  "notes": "",
+  "meta": {}
+}
