@@ -62,7 +62,7 @@ export function MarkdownImportModal({ open, onClose, onImport }: MarkdownImportM
       okButtonProps={{ disabled: blocks.length === 0 }}
       destroyOnHidden
     >
-      <Space direction="vertical" size={14} className="markdownImportForm">
+      <Space orientation="vertical" size={14} className="markdownImportForm">
         <Typography.Text type="secondary">
           {messages.markdownImport.description}
         </Typography.Text>
@@ -73,7 +73,7 @@ export function MarkdownImportModal({ open, onClose, onImport }: MarkdownImportM
         <Input.TextArea
           rows={10}
           value={markdown}
-          placeholder="```mermaid\nflowchart LR\n  A --> B\n```"
+          placeholder={messages.markdownImport.placeholder}
           onChange={(event) => handleMarkdownChange(event.target.value)}
         />
         {blocks.length > 1 ? (

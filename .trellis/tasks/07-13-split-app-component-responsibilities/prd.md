@@ -20,11 +20,11 @@ Reduce `App.tsx` responsibility concentration by extracting focused UI/action un
 
 ## Acceptance Criteria
 
-- [ ] Export action logic is isolated from `App.tsx` in a focused hook or helper.
-- [ ] Template sidebar rendering/filtering is isolated in a focused component or helper without owning source state.
-- [ ] Header actions are isolated enough that `App.tsx` no longer contains the full export menu definition inline.
-- [ ] Markdown import placeholder comes from `src/i18n/messages.ts`.
-- [ ] Existing app/i18n/component tests pass.
+- [x] Export action logic is isolated from `App.tsx` in a focused hook or helper.
+- [x] Template sidebar rendering/filtering is isolated in a focused component or helper without owning source state.
+- [x] Header actions are isolated enough that `App.tsx` no longer contains the full export menu definition inline.
+- [x] Markdown import placeholder comes from `src/i18n/messages.ts`.
+- [x] Existing app/i18n/component tests pass.
 
 ## Out of Scope
 

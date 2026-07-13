@@ -29,6 +29,9 @@ Cover these paths when the UI or README screenshots are involved:
 - Markdown import handles multiple fenced Mermaid blocks
 - SVG / PNG / JPG / Markdown export actions remain enabled only when valid
 - narrow/mobile viewport has no horizontal overflow
+- at `390x844`, desktop-only sidebars are hidden or converted before the main editor shell is rendered; the content column must not be squeezed into a narrow strip
+
+When using Ant Design responsive containers such as `Layout.Sider`, do not rely on the component breakpoint alone. Add an explicit CSS or render guard for the mobile layout and verify it in a real browser screenshot.
 
 Blob downloads should be verified through the visible user action path when possible; automation may not expose a browser download event reliably.
 

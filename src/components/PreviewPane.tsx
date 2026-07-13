@@ -87,7 +87,7 @@ export function PreviewPane({ svg, state, zoom, scale, filename, background }: P
             description={messages.preview.syntaxErrorDescription}
           />
         ) : svg ? (
-          <Spin spinning={state.status === "rendering"} tip={messages.common.loading}>
+          <Spin spinning={state.status === "rendering"} description={messages.common.loading}>
             <div
               className="svgSurface"
               style={surfaceStyle}

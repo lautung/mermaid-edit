@@ -49,7 +49,7 @@ export function SettingsPanel({
         <SettingOutlined />
       </div>
 
-      <Space direction="vertical" size={18} className="settingsFields">
+      <Space orientation="vertical" size={18} className="settingsFields">
         <SettingsField label={messages.settings.fields.theme} overridden={overriddenKeys.has("theme")}>
           <Select
             value={settings.theme}

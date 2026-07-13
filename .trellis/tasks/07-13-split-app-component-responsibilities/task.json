@@ -3,7 +3,7 @@
   "name": "split-app-component-responsibilities",
   "title": "Split App component responsibilities",
   "description": "Reduce App.tsx concentration by extracting export actions and focused shell/sidebar/header units without changing user-visible workflows.",
-  "status": "planning",
+  "status": "in_progress",
   "dev_type": null,
   "scope": null,
   "package": null,

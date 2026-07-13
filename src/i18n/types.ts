@@ -147,6 +147,7 @@ export type AppMessages = {
     title: string;
     okText: string;
     description: string;
+    placeholder: string;
     chooseFile: string;
     readError: string;
     noBlocks: string;

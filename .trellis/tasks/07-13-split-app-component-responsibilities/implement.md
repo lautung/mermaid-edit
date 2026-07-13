@@ -2,12 +2,12 @@
 
 ## Checklist
 
-- [ ] Add Markdown import placeholder to i18n message types and locale data.
-- [ ] Update `MarkdownImportModal` to use the localized placeholder.
-- [ ] Extract export actions into a focused hook/helper and update `App.tsx`.
-- [ ] Extract template sidebar.
-- [ ] Extract header actions.
-- [ ] Run app/component/i18n targeted tests and full validation.
+- [x] Add Markdown import placeholder to i18n message types and locale data.
+- [x] Update `MarkdownImportModal` to use the localized placeholder.
+- [x] Extract export actions into a focused hook/helper and update `App.tsx`.
+- [x] Extract template sidebar.
+- [x] Extract header actions.
+- [x] Run app/component/i18n targeted tests and full validation.
 
 ## Validation
 
