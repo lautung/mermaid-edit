@@ -935,3 +935,38 @@ Archived the parent optimization program after all five child tasks completed: b
 ### Next Steps
 
 - None - task complete
+
+
+## Session 29: React Router URL state optimization
+
+**Date**: 2026-07-13
+**Task**: React Router URL state optimization
+**Branch**: `main`
+
+### Summary
+
+Added React Router library-mode shell, URL-backed lightweight editor view state, controlled preview tabs, tests, browser smoke verification, and documented the URL state contract.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `c326c06` | (see git log) |
+| `2ee79a0` | (see git log) |
+| `c4c3deb` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
