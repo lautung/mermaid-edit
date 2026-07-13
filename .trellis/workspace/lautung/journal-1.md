@@ -599,3 +599,36 @@ Implemented browser language detection for initial locale selection while preser
 ### Next Steps
 
 - None - task complete
+
+
+## Session 19: Locale coverage and docs alignment
+
+**Date**: 2026-07-13
+**Task**: Locale coverage and docs alignment
+**Branch**: `codex/i18n-docs-alignment`
+
+### Summary
+
+Completed missing locale coverage for settings and status text, aligned README and AGENTS with multilingual frontend behavior, and verified tests lint build before push.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `bcf5572` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

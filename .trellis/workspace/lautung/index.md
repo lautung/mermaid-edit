@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 18
+- **Total Sessions**: 19
 - **Last Active**: 2026-07-13
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~601 | Active |
+| `journal-1.md` | ~634 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 19 | 2026-07-13 | Locale coverage and docs alignment | `bcf5572` | `codex/i18n-docs-alignment` |
 | 18 | 2026-07-13 | Detect browser locale | `16d3830` | `main` |
 | 17 | 2026-07-13 | Merge i18n branch to main | `7062ee4` | `main` |
 | 16 | 2026-07-13 | Refresh Mermaid editor docs and specs | `0ae8326` | `main` |
