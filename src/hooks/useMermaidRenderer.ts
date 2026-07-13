@@ -21,11 +21,14 @@ export function useMermaidRenderer(source: string, settings: DiagramSettings) {
   });
 
   useEffect(() => {
+    const themeVariables =
+      settings.background === "transparent" ? undefined : { background: settings.background };
+
     mermaid.initialize({
       startOnLoad: false,
       securityLevel: "strict",
       theme: settings.theme,
-      themeVariables: { background: settings.background },
+      ...(themeVariables ? { themeVariables } : {}),
       fontFamily: settings.fontFamily,
       layout: settings.layout,
       flowchart: { curve: settings.curve },

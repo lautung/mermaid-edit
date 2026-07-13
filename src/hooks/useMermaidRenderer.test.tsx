@@ -102,6 +102,16 @@ describe("useMermaidRenderer", () => {
     expect(getRenderResult(container).dataset).toMatchObject({ status: "ready", svg: latestSvg });
   });
 
+  it("does not pass transparent background into Mermaid theme variables", () => {
+    render(<RenderProbe source="flowchart LR\n  A --> B" />);
+
+    expect(mermaid.initialize).toHaveBeenLastCalledWith(
+      expect.not.objectContaining({
+        themeVariables: expect.objectContaining({ background: "transparent" }),
+      }),
+    );
+  });
+
   it("ignores an older error after the latest request succeeds", async () => {
     const { container, rerender } = render(<RenderProbe source="flowchart LR\n  A --> B" />);
 
