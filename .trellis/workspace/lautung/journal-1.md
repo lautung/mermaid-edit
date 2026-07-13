@@ -401,3 +401,36 @@ Changed the Mermaid editor template sidebar from a tall vertical chart-type menu
 ### Next Steps
 
 - None - task complete
+
+
+## Session 13: Wire template manager button
+
+**Date**: 2026-07-13
+**Task**: Wire template manager button
+**Branch**: `main`
+
+### Summary
+
+Connected the sidebar Manage Templates button to a searchable template management modal, added focused tests, and verified test, lint, and build.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `b1f9e1c` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
