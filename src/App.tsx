@@ -270,7 +270,7 @@ function MermaidEditorApp() {
       <Layout>
         <Header className="appHeader">
           <Space align="center" size={12}>
-            <div className="brandMark">M</div>
+            <img className="brandMark" src="/favicon.svg" alt="" aria-hidden="true" />
             <Title level={3}>Mermaid 在线编辑器</Title>
             <Tag color="cyan">浏览器本地处理</Tag>
             <Badge status={canExport ? "success" : state.status === "error" ? "error" : "processing"} />

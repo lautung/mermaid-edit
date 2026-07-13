@@ -176,16 +176,10 @@ input {
 }
 
 .brandMark {
-  display: grid;
   width: 36px;
   height: 36px;
-  place-items: center;
-  border-radius: 8px;
-  background: #0f8f82;
-  color: #ffffff;
-  font-size: 20px;
-  font-weight: 850;
-  letter-spacing: 0;
+  flex: 0 0 36px;
+  display: block;
 }
 
 .headerActions {
