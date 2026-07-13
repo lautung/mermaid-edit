@@ -335,3 +335,36 @@ Prevent transparent preview backgrounds from being passed into Mermaid theme var
 ### Next Steps
 
 - None - task complete
+
+
+## Session 11: Normalize Mermaid preview sizing
+
+**Date**: 2026-07-13
+**Task**: Normalize Mermaid preview sizing
+**Branch**: `main`
+
+### Summary
+
+Fixed template preview sizing by deriving an aspect-ratio display box from rendered SVG dimensions, preventing very wide diagrams from becoming unreadably short and tall diagrams from overflowing the preview area. Added regression coverage and verified tests, lint, build, and browser measurements.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `fb216a0` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
