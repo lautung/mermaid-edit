@@ -1003,3 +1003,36 @@ Upgraded the Mermaid editor to React Router 8 Framework Mode SPA with React 19, 
 ### Next Steps
 
 - None - task complete
+
+
+## Session 31: Fix Vercel React Router output
+
+**Date**: 2026-07-14
+**Task**: Fix Vercel React Router output
+**Branch**: `main`
+
+### Summary
+
+Configured Vercel to publish React Router Framework output from build/client, ignored local Vercel output directories in ESLint, validated lint/tests/build, pushed main, and confirmed the new production deployment reached READY.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `9fcb7a5` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
