@@ -1,21 +1,29 @@
 import { useEffect, useState } from "react";
 
-export function useJsonLocalStorage<T>(key: string, fallback: T) {
+export function useJsonLocalStorage<T>(
+  key: string,
+  fallback: T,
+  normalize: (value: unknown) => T = (value) => value as T,
+) {
   const [value, setValue] = useState<T>(() => {
-    const stored = window.localStorage.getItem(key);
-    if (!stored) {
-      return fallback;
-    }
-
     try {
-      return JSON.parse(stored) as T;
+      const stored = window.localStorage.getItem(key);
+      if (!stored) {
+        return fallback;
+      }
+
+      return normalize(JSON.parse(stored));
     } catch {
       return fallback;
     }
   });
 
   useEffect(() => {
-    window.localStorage.setItem(key, JSON.stringify(value));
+    try {
+      window.localStorage.setItem(key, JSON.stringify(value));
+    } catch {
+      // Browser persistence is best-effort; keep the in-memory state usable.
+    }
   }, [key, value]);
 
   return [value, setValue] as const;

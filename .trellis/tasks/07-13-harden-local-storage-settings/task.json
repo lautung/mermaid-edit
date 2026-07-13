@@ -3,7 +3,7 @@
   "name": "harden-local-storage-settings",
   "title": "Harden local storage and settings migration",
   "description": "Make source/settings persistence tolerant of unavailable localStorage, invalid JSON, old settings, and manually corrupted localStorage values.",
-  "status": "planning",
+  "status": "in_progress",
   "dev_type": null,
   "scope": null,
   "package": null,

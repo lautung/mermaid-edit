@@ -36,7 +36,7 @@ import { SettingsPanel } from "./components/SettingsPanel";
 import { StatusBar } from "./components/StatusBar";
 import { TemplateManagerModal } from "./components/TemplateManagerModal";
 import { diagramTemplates, initialDiagram } from "./data/examples";
-import { defaultDiagramSettings } from "./data/settings";
+import { defaultDiagramSettings, normalizeDiagramSettings } from "./data/settings";
 import { useJsonLocalStorage } from "./hooks/useJsonLocalStorage";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useMermaidRenderer } from "./hooks/useMermaidRenderer";
@@ -103,6 +103,7 @@ function MermaidEditorApp() {
   const [settings, setSettings] = useJsonLocalStorage<DiagramSettings>(
     "mermaid-edit:settings",
     defaultDiagramSettings,
+    normalizeDiagramSettings,
   );
   const [scale, setScale] = useState(2);
   const [zoom, setZoom] = useState(100);

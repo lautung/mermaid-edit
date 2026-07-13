@@ -2,11 +2,18 @@
 
 ## Checklist
 
-- [ ] Add focused tests for safe string localStorage read/write behavior.
-- [ ] Add focused tests for JSON read/write exceptions and invalid JSON fallback.
-- [ ] Add `normalizeDiagramSettings()` and tests for invalid field values.
-- [ ] Wire settings persistence through normalization.
-- [ ] Run targeted and full validation.
+- [x] Add focused tests for safe string localStorage read/write behavior.
+- [x] Add focused tests for JSON read/write exceptions and invalid JSON fallback.
+- [x] Add `normalizeDiagramSettings()` and tests for invalid field values.
+- [x] Wire settings persistence through normalization.
+- [x] Run targeted and full validation.
+
+## Result Notes
+
+- `useLocalStorage` and `useJsonLocalStorage` now treat localStorage reads/writes as best-effort and preserve in-memory state when writes fail.
+- `useJsonLocalStorage` accepts an optional normalize function for runtime boundaries.
+- `normalizeDiagramSettings()` validates settings restored from localStorage field-by-field.
+- Added focused hook tests with a fake `window.localStorage` because this Vitest/jsdom environment does not provide a complete Storage implementation.
 
 ## Validation
 

@@ -42,3 +42,9 @@ There is no server state. Features that require accounts, cloud storage, sharing
 - Do not duplicate Mermaid source in child component state.
 - Do not treat localStorage as a server sync mechanism.
 - Do not persist transient render errors, modal visibility, or export progress unless a user-facing restore requirement exists.
+
+## Persistence Safety
+
+Browser localStorage is best-effort. Hooks must tolerate `getItem` / `setItem` throwing because storage may be disabled, unavailable, or over quota. Reads should fall back to the provided default, and write failures should not prevent the current React state from updating.
+
+Typed JSON settings need a runtime boundary. Use `normalizeDiagramSettings()` when restoring `mermaid-edit:settings` so corrupt or old values fall back field-by-field before they reach Mermaid rendering or settings controls.
