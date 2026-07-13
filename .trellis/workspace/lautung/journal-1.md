@@ -865,3 +865,36 @@ Made localStorage persistence best-effort for string and JSON hooks, added runti
 ### Next Steps
 
 - None - task complete
+
+
+## Session 27: Split App component responsibilities
+
+**Date**: 2026-07-13
+**Task**: Split App component responsibilities
+**Branch**: `main`
+
+### Summary
+
+Extracted App export actions, template sidebar, and header actions into focused modules; localized Markdown import placeholder; fixed mobile sidebar squeeze found in browser smoke checks.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `48f6a37` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

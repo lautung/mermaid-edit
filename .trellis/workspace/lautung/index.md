@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 26
+- **Total Sessions**: 27
 - **Last Active**: 2026-07-13
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~867 | Active |
+| `journal-1.md` | ~900 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 27 | 2026-07-13 | Split App component responsibilities | `48f6a37` | `main` |
 | 26 | 2026-07-13 | Harden local storage settings | `8f4788b` | `main` |
 | 25 | 2026-07-13 | Harden export filenames | `b033c4c` | `main` |
 | 24 | 2026-07-13 | Optimize Mermaid render lifecycle | `3ad62f1` | `main` |
