@@ -1,14 +1,44 @@
 # Quality Guidelines
 
-> Code quality standards for frontend development.
+Code quality standards for frontend development.
 
 ## Overview
 
-Frontend quality is checked with ESLint, TypeScript/Vite production build, Vitest behavior tests, and a browser smoke check for user-facing editor changes.
+Frontend quality is checked with Vitest behavior tests, ESLint, TypeScript/Vite production build, and browser smoke checks for user-facing editor or documentation screenshot changes.
+
+## Required Commands
+
+Run these after relevant changes:
+
+```bash
+npm test -- --run
+npm run lint
+npm run build
+```
+
+For UI layout, export, README screenshot, or responsive behavior changes, also verify the real app in Chrome.
+
+## Browser Smoke Checks
+
+Cover these paths when the UI or README screenshots are involved:
+
+- valid Mermaid input renders a diagram
+- invalid Mermaid input shows the existing error/diagnostic state
+- templates load from the template library
+- settings affect rendering or preview appearance
+- Markdown import handles multiple fenced Mermaid blocks
+- SVG / PNG / JPG / Markdown export actions remain enabled only when valid
+- narrow/mobile viewport has no horizontal overflow
+
+Blob downloads should be verified through the visible user action path when possible; automation may not expose a browser download event reliably.
 
 ## Forbidden Patterns
 
-Do not bypass the controlled `value` / `onChange` boundary, recreate CodeMirror on each render, or emit `onChange` for programmatic external-value synchronization. These patterns cause lost cursor state, feedback loops, or unnecessary rendering.
+- Do not bypass the controlled `value` / `onChange` boundary.
+- Do not recreate CodeMirror on each render.
+- Do not emit `onChange` for programmatic external-value synchronization.
+- Do not use `Image -> Canvas` for raster export; use `canvg` to render SVG directly to Canvas.
+- Do not introduce backend assumptions into docs, tests, or Trellis specs for this frontend-only app.
 
 ## Required Patterns
 
@@ -22,12 +52,8 @@ The hook may keep the previous SVG while the current request is `rendering`, but
 
 ### Preview Scaling Contract
 
-Preview zoom must participate in layout sizing. Do not use `transform: scale(...)` for the rendered Mermaid surface: transforms do not change the scrollable layout area, so enlarged diagrams can be clipped. Apply the percentage with the CSS `zoom` property instead; the SVG's existing `max-width: 100%` and `height: auto` preserve its aspect ratio, while the preview canvas can scroll when enlarged. Add a focused component test for the `zoom` style and browser-check 50%, 100%, and 200% zoom.
-
-## Testing Requirements
-
-Run `npm test -- --run`, `npm run lint`, and `npm run build`. For editor changes, verify in Chrome that valid Mermaid input renders, invalid input shows the existing error state, templates load, settings affect rendering, Markdown import handles multiple fenced blocks, and the 390px layout has no horizontal overflow. Blob downloads should be verified through the user-visible action path; automation may not expose a client-side download event.
+Preview zoom must participate in layout sizing. Do not use `transform: scale(...)` for the rendered Mermaid surface: transforms do not change the scrollable layout area, so enlarged diagrams can be clipped. Apply the percentage with the CSS `zoom` property instead; the SVG's existing `max-width: 100%` and `height: auto` preserve its aspect ratio, while the preview canvas can scroll when enlarged.
 
 ## Code Review Checklist
 
-Reviewers should check the parent-child prop contract, editor lifecycle cleanup, external synchronization annotations, accessibility labeling, Frontmatter precedence, local-only persistence, official Mermaid template syntax, preservation of the existing Mermaid render/export flow, and the async Mermaid rendering contract above.
+Reviewers should check parent-child prop contracts, editor lifecycle cleanup, external synchronization annotations, accessibility labeling, Frontmatter precedence, local-only persistence, official Mermaid template syntax, preservation of the existing Mermaid render/export flow, and the async Mermaid rendering contract above.

@@ -1,51 +1,44 @@
 # State Management
 
-> How state is managed in this project.
-
----
+How state is managed in this project.
 
 ## Overview
 
-<!--
-Document your project's state management conventions here.
-
-Questions to answer:
-- What state management solution do you use?
-- How is local vs global state decided?
-- How do you handle server state?
-- What are the patterns for derived state?
--->
-
-(To be filled by the team)
-
----
+The app uses React local state and browser localStorage. There is no Redux, Zustand, React Query, server state, or URL-state contract.
 
 ## State Categories
 
-<!-- Local state, global state, server state, URL state -->
+- Persistent user state:
+  - Mermaid source via `useLocalStorage("mermaid-edit:source", initialDiagram)`
+  - diagram settings via `useJsonLocalStorage("mermaid-edit:settings", defaultDiagramSettings)`
+- Session-only UI state:
+  - export scale, zoom, filename, selected template type, template search text
+  - Markdown import modal visibility
+  - template manager modal visibility
+- Derived state:
+  - `canExport` from render state and SVG presence
+  - filtered template list from selected type and search keyword
+  - active template from source equality
+- Render state:
+  - `{ svg, state }` from `useMermaidRenderer`
 
-(To be filled by the team)
+## Ownership Rules
 
----
+- `App.tsx` owns cross-panel state and user action handlers.
+- Components receive controlled props and callbacks. Do not let a child component write localStorage or mutate shared state directly unless it is a focused persistence hook.
+- Rendered SVG is hook output, not persistent application state.
+- Template metadata is static data from `src/data/examples.ts`.
 
 ## When to Use Global State
 
-<!-- Criteria for promoting state to global -->
-
-(To be filled by the team)
-
----
+Do not add global state for current editor workflows. Consider a global store only if future requirements add independent routes or sibling trees that need shared mutable state without a common owner.
 
 ## Server State
 
-<!-- How server data is cached and synchronized -->
-
-(To be filled by the team)
-
----
+There is no server state. Features that require accounts, cloud storage, sharing links, or remote template sync are out of scope for the current architecture.
 
 ## Common Mistakes
 
-<!-- State management mistakes your team has made -->
-
-(To be filled by the team)
+- Do not duplicate Mermaid source in child component state.
+- Do not treat localStorage as a server sync mechanism.
+- Do not persist transient render errors, modal visibility, or export progress unless a user-facing restore requirement exists.
