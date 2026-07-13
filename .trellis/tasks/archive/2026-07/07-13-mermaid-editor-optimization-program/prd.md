@@ -39,10 +39,10 @@ Coordinate the optimization work described in `docs/optimization-research.md` as
 
 ## Acceptance Criteria
 
-- [ ] The task tree contains one parent and five children mapped to the remaining optimization themes.
-- [ ] Each child task has a focused `prd.md`, `design.md`, and `implement.md`.
-- [ ] The parent task records cross-child ordering and final integration criteria.
-- [ ] The final program-level verification plan includes `npm test -- --run`, `npm run lint`, `npm run build`, and real-browser smoke checks when UI/export behavior changes.
+- [x] The task tree contains one parent and five children mapped to the remaining optimization themes.
+- [x] Each child task has a focused `prd.md`, `design.md`, and `implement.md`.
+- [x] The parent task records cross-child ordering and final integration criteria.
+- [x] The final program-level verification plan includes `npm test -- --run`, `npm run lint`, `npm run build`, and real-browser smoke checks when UI/export behavior changes.
 
 ## Out of Scope
 

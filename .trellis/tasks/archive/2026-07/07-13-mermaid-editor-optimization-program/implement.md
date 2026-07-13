@@ -2,15 +2,15 @@
 
 ## Checklist
 
-- [ ] Review and approve this task split.
-- [ ] Start `07-13-optimize-bundle-lazy-loading`.
-- [ ] Complete and archive bundle/lazy-loading work.
-- [ ] Start `07-13-optimize-render-lifecycle`.
-- [ ] Complete and archive render-lifecycle work.
-- [ ] Start P1 children in an order that matches the current code risk:
+- [x] Review and approve this task split.
+- [x] Start `07-13-optimize-bundle-lazy-loading`.
+- [x] Complete and archive bundle/lazy-loading work.
+- [x] Start `07-13-optimize-render-lifecycle`.
+- [x] Complete and archive render-lifecycle work.
+- [x] Start P1 children in an order that matches the current code risk:
   export hardening, localStorage/settings hardening, then component split.
-- [ ] After all children complete, run full validation from the parent checkout.
-- [ ] Record any deferred optimization with reason and evidence.
+- [x] After all children complete, run full validation from the parent checkout.
+- [x] Record any deferred optimization with reason and evidence.
 
 ## Validation
 
