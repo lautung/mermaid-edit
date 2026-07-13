@@ -1,6 +1,7 @@
 export type DiagramTemplate = {
   id: string;
   title: string;
+  typeKey: string;
   type: string;
   tags: string[];
   source: string;
@@ -10,6 +11,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "flow-basic",
     title: "流程图 - 基础决策",
+    typeKey: "flowchart",
     type: "流程图",
     tags: ["常用", "技术文档"],
     source: `flowchart TD
@@ -24,6 +26,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "sequence-login",
     title: "时序图 - 用户登录",
+    typeKey: "sequence",
     type: "时序图",
     tags: ["产品流程", "接口"],
     source: `sequenceDiagram
@@ -42,6 +45,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "class-service",
     title: "类图 - 服务结构",
+    typeKey: "class",
     type: "类图",
     tags: ["技术文档"],
     source: `classDiagram
@@ -64,6 +68,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "state-render",
     title: "状态图 - 渲染流程",
+    typeKey: "state",
     type: "状态图",
     tags: ["常用", "工程"],
     source: `stateDiagram-v2
@@ -78,6 +83,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "er-project",
     title: "ER 图 - 项目管理",
+    typeKey: "er",
     type: "ER 图",
     tags: ["数据建模"],
     source: `erDiagram
@@ -100,6 +106,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "gantt-release",
     title: "甘特图 - 发布计划",
+    typeKey: "gantt",
     type: "甘特图",
     tags: ["产品流程"],
     source: `gantt
@@ -115,6 +122,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "git-flow",
     title: "Git 图 - 分支策略",
+    typeKey: "git",
     type: "Git 图",
     tags: ["工程"],
     source: `gitGraph
@@ -130,6 +138,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "journey-docs",
     title: "用户旅程 - 文档配图",
+    typeKey: "journey",
     type: "用户旅程",
     tags: ["产品流程"],
     source: `journey
@@ -147,6 +156,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "pie-browser",
     title: "饼图 - 浏览器占比",
+    typeKey: "pie",
     type: "饼图",
     tags: ["数据", "报告"],
     source: `pie title 浏览器占比
@@ -157,6 +167,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "quadrant-priority",
     title: "象限图 - 技术优先级",
+    typeKey: "quadrant",
     type: "象限图",
     tags: ["决策", "产品流程"],
     source: `quadrantChart
@@ -173,6 +184,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "requirement-editor",
     title: "需求图 - 编辑器需求",
+    typeKey: "requirement",
     type: "需求图",
     tags: ["产品", "工程"],
     source: `requirementDiagram
@@ -191,6 +203,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "mindmap-workbench",
     title: "思维导图 - 工作台",
+    typeKey: "mindmap",
     type: "思维导图",
     tags: ["规划", "知识整理"],
     source: `mindmap
@@ -208,6 +221,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "timeline-release",
     title: "时间线 - 版本演进",
+    typeKey: "timeline",
     type: "时间线",
     tags: ["规划", "项目管理"],
     source: `timeline
@@ -219,6 +233,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "sankey-flow",
     title: "桑基图 - 用户流转",
+    typeKey: "sankey",
     type: "Sankey",
     tags: ["数据", "流程"],
     source: `sankey-beta
@@ -232,6 +247,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "xychart-performance",
     title: "XY 图 - 渲染耗时",
+    typeKey: "xychart",
     type: "XY 图",
     tags: ["数据", "性能"],
     source: `xychart-beta
@@ -244,6 +260,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "block-pipeline",
     title: "块图 - 编辑流水线",
+    typeKey: "block",
     type: "块图",
     tags: ["工程", "架构"],
     source: `block
@@ -255,6 +272,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "packet-header",
     title: "数据包 - 请求头",
+    typeKey: "packet",
     type: "数据包图",
     tags: ["网络", "工程"],
     source: `packet-beta
@@ -266,6 +284,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "kanban-release",
     title: "看板 - 发布任务",
+    typeKey: "kanban",
     type: "看板",
     tags: ["项目管理", "协作"],
     source: `kanban
@@ -281,6 +300,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "architecture-editor",
     title: "架构图 - 编辑器模块",
+    typeKey: "architecture",
     type: "架构图",
     tags: ["架构", "工程"],
     source: `architecture-beta
@@ -294,6 +314,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "radar-skills",
     title: "雷达图 - 能力评估",
+    typeKey: "radar",
     type: "雷达图",
     tags: ["数据", "评估"],
     source: `radar-beta
@@ -306,6 +327,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "treemap-modules",
     title: "树状图 - 模块占比",
+    typeKey: "treemap",
     type: "树状图",
     tags: ["数据", "架构"],
     source: `treemap-beta
@@ -318,6 +340,7 @@ export const diagramTemplates: DiagramTemplate[] = [
   {
     id: "venn-features",
     title: "韦恩图 - 功能交集",
+    typeKey: "venn",
     type: "韦恩图",
     tags: ["数据", "分析"],
     source: `venn-beta

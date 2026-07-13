@@ -25,6 +25,7 @@ const templates: DiagramTemplate[] = [
   {
     id: "flow-basic",
     title: "流程图 - 基础决策",
+    typeKey: "flowchart",
     type: "流程图",
     tags: ["常用", "技术文档"],
     source: "flowchart TD\n  A --> B",
@@ -32,6 +33,7 @@ const templates: DiagramTemplate[] = [
   {
     id: "sequence-login",
     title: "时序图 - 用户登录",
+    typeKey: "sequence",
     type: "时序图",
     tags: ["产品流程"],
     source: "sequenceDiagram\n  A->>B: login",
@@ -42,7 +44,7 @@ function renderModal(overrides: Partial<ComponentProps<typeof TemplateManagerMod
   const props = {
     open: true,
     templates,
-    chartTypes: ["流程图", "时序图"],
+    chartTypes: ["flowchart", "sequence"],
     onClose: vi.fn(),
     onSelectTemplate: vi.fn(),
     ...overrides,

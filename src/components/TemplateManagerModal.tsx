@@ -37,7 +37,7 @@ export function TemplateManagerModal({
   const chartTypeOptions = useMemo(() => {
     const labels = new Map<string, string>();
     localizedTemplates.forEach((template) => {
-      labels.set(template.type, template.text.type);
+      labels.set(template.typeKey, template.text.type);
     });
 
     return [
@@ -50,7 +50,7 @@ export function TemplateManagerModal({
     const keyword = search.trim().toLowerCase();
 
     return localizedTemplates.filter((template) => {
-      const matchesType = !selectedType || template.type === selectedType;
+      const matchesType = !selectedType || template.typeKey === selectedType;
       const matchesSearch =
         !keyword ||
         template.text.title.toLowerCase().includes(keyword) ||

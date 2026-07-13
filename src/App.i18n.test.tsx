@@ -142,7 +142,7 @@ describe("App internationalization", () => {
   });
 
   test("initializes lightweight view state from URL search params", async () => {
-    renderApp(["/?type=类图&q=服务&tab=export&zoom=150&scale=3&filename=demo"]);
+    renderApp(["/?type=class&q=服务&tab=export&zoom=150&scale=3&filename=demo"]);
 
     expect(await screen.findByRole("heading", { name: "Mermaid 在线编辑器" })).not.toBeNull();
     expect((screen.getByPlaceholderText("搜索模板") as HTMLInputElement).value).toBe("服务");

@@ -5,6 +5,13 @@ import { describe, expect, it } from "vitest";
 import { diagramTemplates } from "./examples";
 
 describe("diagram templates", () => {
+  it("uses stable ASCII type keys for URL state and filtering", () => {
+    const typeKeys = diagramTemplates.map((template) => template.typeKey);
+
+    expect(typeKeys.every((typeKey) => /^[a-z][a-z-]*$/.test(typeKey))).toBe(true);
+    expect(new Set(typeKeys).size).toBe(typeKeys.length);
+  });
+
   it("keeps every template parseable by the bundled Mermaid version", async () => {
     mermaid.initialize({ securityLevel: "strict", startOnLoad: false });
 

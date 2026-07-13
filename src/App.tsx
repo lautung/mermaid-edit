@@ -35,7 +35,7 @@ const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
 const { useBreakpoint } = Grid;
 
-const chartTypes = Array.from(new Set(diagramTemplates.map((template) => template.type)));
+const chartTypes = Array.from(new Set(diagramTemplates.map((template) => template.typeKey)));
 const localeAliases: Record<string, LocaleCode> = {
   "zh-cn": "zh-CN",
   "zh-hans": "zh-CN",
@@ -137,7 +137,7 @@ function MermaidEditorApp() {
     }
 
     setSource(template.source);
-    setSelectedType(template.type);
+    setSelectedType(template.typeKey);
     message.success(messages.feedback.templateLoaded(templateText(template.id, template).title));
   };
 

@@ -36,14 +36,14 @@ export function TemplateSidebar({
   const chartTypeLabels = useMemo(() => {
     const labels = new Map<string, string>();
     templates.forEach((template) => {
-      labels.set(template.type, template.text.type);
+      labels.set(template.typeKey, template.text.type);
     });
     return labels;
   }, [templates]);
   const filteredTemplates = useMemo(
     () =>
       templates.filter((template) => {
-        const matchesType = template.type === selectedType;
+        const matchesType = template.typeKey === selectedType;
         const keyword = search.trim().toLowerCase();
         const matchesSearch =
           !keyword ||
