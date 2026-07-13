@@ -766,3 +766,36 @@ Planned the Mermaid editor optimization task tree, lazy-loaded canvg for raster 
 ### Next Steps
 
 - None - task complete
+
+
+## Session 24: Optimize Mermaid render lifecycle
+
+**Date**: 2026-07-13
+**Task**: Optimize Mermaid render lifecycle
+**Branch**: `main`
+
+### Summary
+
+Split Mermaid initialization from render scheduling, prevented locale-only UI text changes from triggering Mermaid renders, preserved stale-request and retry behavior, and documented the hook contract.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `3ad62f1` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
