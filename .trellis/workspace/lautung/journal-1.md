@@ -566,3 +566,36 @@ Merged codex/i18n into main, resolved conflicts with the template manager work, 
 ### Next Steps
 
 - None - task complete
+
+
+## Session 18: Detect browser locale
+
+**Date**: 2026-07-13
+**Task**: Detect browser locale
+**Branch**: `main`
+
+### Summary
+
+Implemented browser language detection for initial locale selection while preserving saved locale precedence.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `16d3830` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
