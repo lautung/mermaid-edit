@@ -22,9 +22,12 @@ Keep hook parameters explicit and serializable. If a hook depends on a settings 
 - register ELK layout support through `@mermaid-js/layout-elk`
 - debounce rendering enough to keep typing usable
 - invalidate stale async requests so older success or error results cannot overwrite the latest source/settings
+- keep locale-only UI message changes out of the Mermaid parse/render request dependencies
 - return structured `RenderState` values instead of throwing into components
 
 Do not render Mermaid directly from UI components. Keep parsing and error conversion in the hook and diagnostics modules.
+
+Locale changes may relabel idle/rendering/ready/error states and rederive existing diagnostics from the last parse error, but they must not call `mermaid.render()` again when source and render settings are unchanged.
 
 ## Data Fetching
 

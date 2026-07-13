@@ -2,11 +2,18 @@
 
 ## Checklist
 
-- [ ] Add or adjust tests to prove locale-only changes do not call `mermaid.render()`.
-- [ ] Split Mermaid initialization from render scheduling.
-- [ ] Add locale reconciliation for idle/ready/error messages.
-- [ ] Preserve chunk retry and stale request tests.
-- [ ] Run targeted hook tests and full validation.
+- [x] Add or adjust tests to prove locale-only changes do not call `mermaid.render()`.
+- [x] Split Mermaid initialization from render scheduling.
+- [x] Add locale reconciliation for idle/ready/error messages.
+- [x] Preserve chunk retry and stale request tests.
+- [x] Run targeted hook tests and full validation.
+
+## Result Notes
+
+- `useMermaidRenderer` now initializes Mermaid from settings separately from render scheduling.
+- Render requests depend on source and settings, while locale message changes relabel current render state without starting a new Mermaid render.
+- Existing syntax diagnostics are rederived from the last parse error when locale changes.
+- Targeted hook tests now cover settings changes, locale-only ready-state relabeling, and locale-only syntax diagnostic relabeling.
 
 ## Validation
 

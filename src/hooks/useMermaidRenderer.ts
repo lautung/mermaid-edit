@@ -38,10 +38,18 @@ export function useMermaidRenderer(
   localeMessages: MermaidRendererLocale = defaultLocaleMessages,
 ) {
   const renderId = useRef(0);
+  const localeMessagesRef = useRef(localeMessages);
+  const lastErrorRef = useRef<{ source: string; error: unknown } | null>(null);
   const [result, setResult] = useState<RenderResult>({
     svg: "",
     state: { status: "idle", message: localeMessages.render.waiting },
   });
+
+  useEffect(() => {
+    localeMessagesRef.current = localeMessages;
+
+    setResult((current) => relocalizeResult(current, localeMessages, lastErrorRef.current));
+  }, [localeMessages]);
 
   useEffect(() => {
     const themeVariables =
@@ -57,33 +65,43 @@ export function useMermaidRenderer(
       flowchart: { curve: settings.curve },
       deterministicIds: true,
     });
+  }, [settings]);
 
+  useEffect(() => {
     const currentId = renderId.current + 1;
     renderId.current = currentId;
 
     if (!source.trim()) {
+      lastErrorRef.current = null;
       setResult({
         svg: "",
-        state: { status: "idle", message: localeMessages.render.empty },
+        state: { status: "idle", message: localeMessagesRef.current.render.empty },
       });
       return;
     }
 
+    lastErrorRef.current = null;
     setResult((previous) => ({
       ...previous,
-      state: { status: "rendering", message: localeMessages.render.rendering },
+      state: { status: "rendering", message: localeMessagesRef.current.render.rendering },
     }));
 
     const timer = window.setTimeout(() => {
-      void renderDiagram(source, currentId, localeMessages).then((nextResult) => {
+      void renderDiagram(source, currentId, () => localeMessagesRef.current).then((nextResult) => {
         if (renderId.current === currentId) {
+          if (nextResult.state.status === "error" && nextResult.state.diagnostic) {
+            lastErrorRef.current = {
+              source,
+              error: new Error(nextResult.state.diagnostic.rawMessage),
+            };
+          }
           setResult(nextResult);
         }
       });
     }, renderDelay);
 
     return () => window.clearTimeout(timer);
-  }, [localeMessages, source, settings]);
+  }, [source, settings]);
 
   return result;
 }
@@ -91,10 +109,11 @@ export function useMermaidRenderer(
 async function renderDiagram(
   source: string,
   currentId: number,
-  localeMessages: MermaidRendererLocale,
+  getLocaleMessages: () => MermaidRendererLocale,
 ): Promise<RenderResult> {
   try {
     const svg = await renderMermaidSvg(source, currentId);
+    const localeMessages = getLocaleMessages();
 
     return {
       svg,
@@ -102,9 +121,10 @@ async function renderDiagram(
     };
   } catch (error) {
     if (isDynamicImportLoadError(error)) {
-      return renderDiagramAfterChunkRetry(source, currentId, localeMessages);
+      return renderDiagramAfterChunkRetry(source, currentId, getLocaleMessages);
     }
 
+    const localeMessages = getLocaleMessages();
     const diagnostic = deriveSyntaxDiagnostic(source, error, localeMessages.diagnostics);
 
     return {
@@ -121,16 +141,19 @@ async function renderDiagram(
 async function renderDiagramAfterChunkRetry(
   source: string,
   currentId: number,
-  localeMessages: MermaidRendererLocale,
+  getLocaleMessages: () => MermaidRendererLocale,
 ): Promise<RenderResult> {
   try {
     const svg = await renderMermaidSvg(source, currentId);
+    const localeMessages = getLocaleMessages();
 
     return {
       svg,
       state: { status: "ready", message: localeMessages.render.ready },
     };
   } catch (error) {
+    const localeMessages = getLocaleMessages();
+
     if (isDynamicImportLoadError(error)) {
       return {
         svg: "",
@@ -169,4 +192,51 @@ function isDynamicImportLoadError(error: unknown) {
   return /failed to fetch dynamically imported module|importing a module script failed/i.test(
     error.message,
   );
+}
+
+function relocalizeResult(
+  result: RenderResult,
+  localeMessages: MermaidRendererLocale,
+  lastError: { source: string; error: unknown } | null,
+): RenderResult {
+  switch (result.state.status) {
+    case "idle":
+      return {
+        ...result,
+        state: {
+          status: "idle",
+          message: result.svg ? localeMessages.render.waiting : localeMessages.render.empty,
+        },
+      };
+    case "rendering":
+      return {
+        ...result,
+        state: { status: "rendering", message: localeMessages.render.rendering },
+      };
+    case "ready":
+      return {
+        ...result,
+        state: { status: "ready", message: localeMessages.render.ready },
+      };
+    case "error":
+      if (!result.state.diagnostic || !lastError) {
+        return {
+          ...result,
+          state: { status: "error", message: localeMessages.render.chunkLoadFailed },
+        };
+      }
+
+      return {
+        svg: "",
+        state: {
+          status: "error",
+          message: result.state.message,
+          diagnostic: deriveSyntaxDiagnostic(
+            lastError.source,
+            lastError.error,
+            localeMessages.diagnostics,
+          ),
+        },
+      };
+  }
 }

@@ -5,6 +5,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import mermaid from "mermaid";
 import type { ParseResult, RenderResult } from "mermaid";
 import { defaultDiagramSettings } from "../data/settings";
+import { messages } from "../i18n/messages";
+import type { DiagnosticMessages } from "../i18n/types";
 import { useMermaidRenderer } from "./useMermaidRenderer";
 
 vi.mock("mermaid", () => ({
@@ -23,8 +25,39 @@ type PendingRender = {
 
 const pendingRenders: PendingRender[] = [];
 
-function RenderProbe({ source }: { source: string }) {
-  const result = useMermaidRenderer(source, defaultDiagramSettings);
+type RenderLocaleMessages = {
+  waiting: string;
+  empty: string;
+  rendering: string;
+  ready: string;
+  chunkLoadFailed: string;
+};
+
+type MermaidRendererLocale = {
+  diagnostics: DiagnosticMessages;
+  render: RenderLocaleMessages;
+};
+
+const zhLocaleMessages: MermaidRendererLocale = {
+  diagnostics: messages["zh-CN"].diagnostics,
+  render: messages["zh-CN"].render,
+};
+
+const enLocaleMessages: MermaidRendererLocale = {
+  diagnostics: messages.en.diagnostics,
+  render: messages.en.render,
+};
+
+function RenderProbe({
+  source,
+  settings = defaultDiagramSettings,
+  localeMessages = zhLocaleMessages,
+}: {
+  source: string;
+  settings?: typeof defaultDiagramSettings;
+  localeMessages?: MermaidRendererLocale;
+}) {
+  const result = useMermaidRenderer(source, settings, localeMessages);
 
   const diagnostic = result.state.status === "error" ? result.state.diagnostic : undefined;
 
@@ -111,6 +144,70 @@ describe("useMermaidRenderer", () => {
         themeVariables: expect.objectContaining({ background: "transparent" }),
       }),
     );
+  });
+
+  it("rerenders and reinitializes Mermaid when render settings change", async () => {
+    const { rerender } = render(<RenderProbe source="flowchart LR\n  A --> B" />);
+
+    await startScheduledRender();
+    await resolveRender(0, "<svg data-render='base'></svg>");
+
+    rerender(
+      <RenderProbe
+        source="flowchart LR\n  A --> B"
+        settings={{ ...defaultDiagramSettings, theme: "dark" }}
+      />,
+    );
+    await startScheduledRender();
+    await resolveRender(1, "<svg data-render='dark'></svg>");
+
+    expect(mermaid.initialize).toHaveBeenLastCalledWith(
+      expect.objectContaining({ theme: "dark" }),
+    );
+    expect(mermaid.render).toHaveBeenCalledTimes(2);
+  });
+
+  it("does not rerender Mermaid when only locale messages change", async () => {
+    const { container, rerender } = render(
+      <RenderProbe source="flowchart LR\n  A --> B" localeMessages={zhLocaleMessages} />,
+    );
+
+    await startScheduledRender();
+    await resolveRender(0, "<svg data-render='ready'></svg>");
+
+    expect(mermaid.render).toHaveBeenCalledTimes(1);
+    expect(getRenderResult(container).dataset).toMatchObject({
+      status: "ready",
+      message: "渲染完成",
+    });
+
+    rerender(<RenderProbe source="flowchart LR\n  A --> B" localeMessages={enLocaleMessages} />);
+
+    expect(mermaid.render).toHaveBeenCalledTimes(1);
+    expect(getRenderResult(container).dataset).toMatchObject({
+      status: "ready",
+      message: messages.en.render.ready,
+      svg: "<svg data-render='ready'></svg>",
+    });
+  });
+
+  it("relocalizes an existing syntax diagnostic without rerendering Mermaid", async () => {
+    vi.mocked(mermaid.parse).mockRejectedValueOnce(new Error("Parse error on line 2"));
+    const { container, rerender } = render(
+      <RenderProbe source="flowchart TD\n  start[开始] -->" localeMessages={zhLocaleMessages} />,
+    );
+
+    await startScheduledRender();
+
+    expect(mermaid.render).not.toHaveBeenCalled();
+    expect(getRenderResult(container).dataset.diagnostic).toContain("流程图");
+
+    rerender(
+      <RenderProbe source="flowchart TD\n  start[开始] -->" localeMessages={enLocaleMessages} />,
+    );
+
+    expect(mermaid.render).not.toHaveBeenCalled();
+    expect(getRenderResult(container).dataset.diagnostic).toContain("Flowchart");
   });
 
   it("ignores an older error after the latest request succeeds", async () => {
