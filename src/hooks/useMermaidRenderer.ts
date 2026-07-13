@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import mermaid from "mermaid";
-import elkLayouts from "@mermaid-js/layout-elk";
 import { deriveSyntaxDiagnostic } from "../diagnostics/deriveSyntaxDiagnostic";
 import { messages } from "../i18n/messages";
 import type { DiagnosticMessages } from "../i18n/types";
 import type { DiagramSettings, RenderState } from "../types";
-
-mermaid.registerLayoutLoaders(elkLayouts);
 
 type RenderResult = {
   svg: string;
@@ -31,6 +28,7 @@ const defaultLocaleMessages: MermaidRendererLocale = {
   diagnostics: messages["zh-CN"].diagnostics,
   render: messages["zh-CN"].render,
 };
+let elkLayoutsReady: Promise<void> | null = null;
 
 export function useMermaidRenderer(
   source: string,
@@ -52,19 +50,7 @@ export function useMermaidRenderer(
   }, [localeMessages]);
 
   useEffect(() => {
-    const themeVariables =
-      settings.background === "transparent" ? undefined : { background: settings.background };
-
-    mermaid.initialize({
-      startOnLoad: false,
-      securityLevel: "strict",
-      theme: settings.theme,
-      ...(themeVariables ? { themeVariables } : {}),
-      fontFamily: settings.fontFamily,
-      layout: settings.layout,
-      flowchart: { curve: settings.curve },
-      deterministicIds: true,
-    });
+    void prepareMermaid(settings);
   }, [settings]);
 
   useEffect(() => {
@@ -87,17 +73,19 @@ export function useMermaidRenderer(
     }));
 
     const timer = window.setTimeout(() => {
-      void renderDiagram(source, currentId, () => localeMessagesRef.current).then((nextResult) => {
-        if (renderId.current === currentId) {
-          if (nextResult.state.status === "error" && nextResult.state.diagnostic) {
-            lastErrorRef.current = {
-              source,
-              error: new Error(nextResult.state.diagnostic.rawMessage),
-            };
+      void renderDiagram(source, settings, currentId, () => localeMessagesRef.current).then(
+        (nextResult) => {
+          if (renderId.current === currentId) {
+            if (nextResult.state.status === "error" && nextResult.state.diagnostic) {
+              lastErrorRef.current = {
+                source,
+                error: new Error(nextResult.state.diagnostic.rawMessage),
+              };
+            }
+            setResult(nextResult);
           }
-          setResult(nextResult);
-        }
-      });
+        },
+      );
     }, renderDelay);
 
     return () => window.clearTimeout(timer);
@@ -108,11 +96,12 @@ export function useMermaidRenderer(
 
 async function renderDiagram(
   source: string,
+  settings: DiagramSettings,
   currentId: number,
   getLocaleMessages: () => MermaidRendererLocale,
 ): Promise<RenderResult> {
   try {
-    const svg = await renderMermaidSvg(source, currentId);
+    const svg = await renderMermaidSvg(source, settings, currentId);
     const localeMessages = getLocaleMessages();
 
     return {
@@ -121,7 +110,7 @@ async function renderDiagram(
     };
   } catch (error) {
     if (isDynamicImportLoadError(error)) {
-      return renderDiagramAfterChunkRetry(source, currentId, getLocaleMessages);
+      return renderDiagramAfterChunkRetry(source, settings, currentId, getLocaleMessages);
     }
 
     const localeMessages = getLocaleMessages();
@@ -140,11 +129,12 @@ async function renderDiagram(
 
 async function renderDiagramAfterChunkRetry(
   source: string,
+  settings: DiagramSettings,
   currentId: number,
   getLocaleMessages: () => MermaidRendererLocale,
 ): Promise<RenderResult> {
   try {
-    const svg = await renderMermaidSvg(source, currentId);
+    const svg = await renderMermaidSvg(source, settings, currentId);
     const localeMessages = getLocaleMessages();
 
     return {
@@ -177,11 +167,40 @@ async function renderDiagramAfterChunkRetry(
   }
 }
 
-async function renderMermaidSvg(source: string, currentId: number) {
+async function renderMermaidSvg(source: string, settings: DiagramSettings, currentId: number) {
+  await prepareMermaid(settings);
   await mermaid.parse(source);
   const { svg } = await mermaid.render(`mermaid-output-${currentId}`, source);
 
   return svg;
+}
+
+async function prepareMermaid(settings: DiagramSettings) {
+  if (settings.layout === "elk") {
+    await loadElkLayouts();
+  }
+
+  const themeVariables =
+    settings.background === "transparent" ? undefined : { background: settings.background };
+
+  mermaid.initialize({
+    startOnLoad: false,
+    securityLevel: "strict",
+    theme: settings.theme,
+    ...(themeVariables ? { themeVariables } : {}),
+    fontFamily: settings.fontFamily,
+    layout: settings.layout,
+    flowchart: { curve: settings.curve },
+    deterministicIds: true,
+  });
+}
+
+async function loadElkLayouts() {
+  elkLayoutsReady ??= import("@mermaid-js/layout-elk").then(({ default: elkLayouts }) => {
+    mermaid.registerLayoutLoaders(elkLayouts);
+  });
+
+  await elkLayoutsReady;
 }
 
 function isDynamicImportLoadError(error: unknown) {

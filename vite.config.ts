@@ -5,6 +5,7 @@ export default defineConfig(({ mode }) => ({
   plugins: mode === "test" ? [] : [reactRouter()],
   build: {
     outDir: "dist",
+    chunkSizeWarningLimit: 1600,
     rollupOptions: {
       output: {
         manualChunks(id) {
