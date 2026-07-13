@@ -368,3 +368,36 @@ Fixed template preview sizing by deriving an aspect-ratio display box from rende
 ### Next Steps
 
 - None - task complete
+
+
+## Session 12: Fix template sidebar visibility
+
+**Date**: 2026-07-13
+**Task**: Fix template sidebar visibility
+**Branch**: `main`
+
+### Summary
+
+Changed the Mermaid editor template sidebar from a tall vertical chart-type menu to a compact bounded type selector so the template list remains visible; verified tests, lint, build, and desktop browser layout.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `6b79f41` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
