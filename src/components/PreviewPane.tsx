@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import type { CSSProperties } from "react";
-import { Alert, Badge, Empty, Spin, Tabs } from "antd";
+import { Alert, Badge, Empty, Space, Spin, Tabs, Tag, Typography } from "antd";
 import { EyeOutlined, WarningOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
 import { useI18n } from "../i18n/useI18n";
 import type { PreviewTab, RenderState } from "../types";
@@ -42,6 +42,7 @@ export function PreviewPane({
 }: PreviewPaneProps) {
   const { messages } = useI18n();
   const canExport = state.status === "ready" && Boolean(svg);
+  const hasExportFilename = filename.trim().length > 0 || Boolean(messages.common.diagramFallback);
   const surfaceStyle = useMemo<PreviewSurfaceStyle>(
     () => ({
       zoom: `${zoom}%`,
@@ -91,37 +92,112 @@ export function PreviewPane({
         ]}
       />
 
-      <div
-        className="previewCanvas"
-        style={{ background: background === "transparent" ? undefined : background }}
-      >
-        {state.status === "error" ? (
+      {activeTab === "preview" ? (
+        <div
+          className="previewCanvas"
+          style={{ background: background === "transparent" ? undefined : background }}
+        >
+          {svg ? (
+            <Spin spinning={state.status === "rendering"} description={messages.common.loading}>
+              <div
+                className="svgSurface"
+                style={surfaceStyle}
+                dangerouslySetInnerHTML={{ __html: svg }}
+              />
+            </Spin>
+          ) : (
+            <Empty description={messages.preview.emptyDescription} />
+          )}
+        </div>
+      ) : activeTab === "export" ? (
+        <div className="previewTabPanel exportCheckPanel">
+          <Typography.Title className="previewTabTitle" level={3}>
+            {messages.preview.exportCheckTitle}
+          </Typography.Title>
           <Alert
-            className="previewAlert"
             showIcon
-            type="error"
-            title={messages.preview.syntaxErrorTitle}
-            description={messages.preview.syntaxErrorDescription}
+            type={canExport ? "success" : "warning"}
+            title={canExport ? messages.preview.exportReady : messages.preview.exportBlocked}
+            description={messages.preview.exportCheckDescription}
           />
-        ) : svg ? (
-          <Spin spinning={state.status === "rendering"} description={messages.common.loading}>
-            <div
-              className="svgSurface"
-              style={surfaceStyle}
-              dangerouslySetInnerHTML={{ __html: svg }}
+          <div className="exportCheckList">
+            <CheckItem checked={state.status === "ready"} label={messages.preview.exportConditionRendered} />
+            <CheckItem checked={Boolean(svg)} label={messages.preview.exportConditionSvg} />
+            <CheckItem checked={state.status !== "error"} label={messages.preview.exportConditionSyntax} />
+            <CheckItem checked={hasExportFilename} label={messages.preview.exportConditionFilename} />
+          </div>
+          <Space className="exportCheckMeta" size={[8, 8]} wrap>
+            <Tag>{messages.preview.filename(filename || messages.common.diagramFallback)}</Tag>
+            <Tag>{messages.preview.exportScale(scale)}</Tag>
+          </Space>
+        </div>
+      ) : (
+        <div className="previewTabPanel errorDetailsPanel">
+          {state.status === "error" ? (
+            <>
+              <Alert
+                showIcon
+                type="error"
+                title={messages.preview.syntaxErrorTitle}
+                description={messages.preview.syntaxErrorDescription}
+              />
+              <section className="errorDetailSection">
+                <Typography.Text strong>{messages.preview.errorSummary}</Typography.Text>
+                <Typography.Paragraph>{state.diagnostic?.summary ?? state.message}</Typography.Paragraph>
+                {state.diagnostic?.line !== undefined ? (
+                  <Tag color="red">{messages.preview.errorLine(state.diagnostic.line)}</Tag>
+                ) : null}
+              </section>
+              <section className="errorDetailSection">
+                <Typography.Text strong>{messages.preview.repairSuggestion}</Typography.Text>
+                {state.diagnostic?.rule ? (
+                  <>
+                    <Space size={[8, 8]} wrap>
+                      <Tag color="volcano">{messages.preview.errorRule}</Tag>
+                      <Typography.Text code>{state.diagnostic.rule.title}</Typography.Text>
+                    </Space>
+                    <Typography.Paragraph>{state.diagnostic.manualFixHint}</Typography.Paragraph>
+                    <Typography.Paragraph code copyable={{ text: state.diagnostic.rule.snippet }}>
+                      {state.diagnostic.rule.snippet}
+                    </Typography.Paragraph>
+                  </>
+                ) : (
+                  <Typography.Paragraph>
+                    {state.diagnostic?.manualFixHint ?? messages.preview.noRepairSuggestion}
+                  </Typography.Paragraph>
+                )}
+              </section>
+              <details className="syntaxAssistantDetails">
+                <summary>{messages.preview.technicalDetails}</summary>
+                <Typography.Paragraph code>
+                  {state.diagnostic?.rawMessage ?? state.message}
+                </Typography.Paragraph>
+              </details>
+            </>
+          ) : (
+            <Empty
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+              description={
+                <span>
+                  <Typography.Text strong>{messages.preview.noErrorTitle}</Typography.Text>
+                  <br />
+                  <Typography.Text type="secondary">{messages.preview.noErrorDescription}</Typography.Text>
+                </span>
+              }
             />
-          </Spin>
-        ) : (
-          <Empty description={messages.preview.emptyDescription} />
-        )}
-      </div>
-
-      <div className="previewMeta">
-        <span>{canExport ? messages.preview.exportable : state.status === "error" ? messages.preview.fixSyntaxError : state.message}</span>
-        <span>{messages.preview.filename(filename || messages.common.diagramFallback)}</span>
-        <span>{messages.preview.exportScale(scale)}</span>
-      </div>
+          )}
+        </div>
+      )}
     </section>
+  );
+}
+
+function CheckItem({ checked, label }: { checked: boolean; label: string }) {
+  return (
+    <div className="exportCheckItem">
+      <Badge status={checked ? "success" : "error"} />
+      <span>{label}</span>
+    </div>
   );
 }
 
