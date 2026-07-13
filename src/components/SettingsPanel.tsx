@@ -1,5 +1,6 @@
 import { Alert, Button, Input, Select, Slider, Space, Tag, Typography } from "antd";
 import { ReloadOutlined, SettingOutlined } from "@ant-design/icons";
+import { useMemo } from "react";
 import type { ReactNode } from "react";
 import { useI18n } from "../i18n/useI18n";
 import type { DiagramSettings } from "../types";
@@ -34,7 +35,7 @@ export function SettingsPanel({
   onResetZoom,
 }: SettingsPanelProps) {
   const { messages } = useI18n();
-  const overriddenKeys = getOverriddenKeys(source);
+  const overriddenKeys = useMemo(() => getOverriddenKeys(source), [source]);
   const backgroundOptions = [
     { label: messages.settings.backgroundOptions.transparent, value: "transparent" },
     { label: messages.settings.backgroundOptions.white, value: "#ffffff" },
