@@ -54,8 +54,20 @@ const { Text, Title } = Typography;
 const { useBreakpoint } = Grid;
 
 const chartTypes = Array.from(new Set(diagramTemplates.map((template) => template.type)));
+const localeAliases: Record<string, LocaleCode> = {
+  "zh-cn": "zh-CN",
+  "zh-hans": "zh-CN",
+  "zh-sg": "zh-CN",
+  "zh-hk": "zh-HK",
+  "zh-hant": "zh-HK",
+  "zh-mo": "zh-HK",
+  "zh-tw": "zh-HK",
+  zh: "zh-CN",
+};
+
 export function App() {
-  const [storedLocale, setStoredLocale] = useLocalStorage("mermaid-edit:locale", "zh-CN");
+  const defaultLocale = useMemo(() => detectBrowserLocale(), []);
+  const [storedLocale, setStoredLocale] = useLocalStorage("mermaid-edit:locale", defaultLocale);
   const locale = isLocaleCode(storedLocale) ? storedLocale : "zh-CN";
 
   return (
@@ -434,4 +446,27 @@ function MermaidEditorApp() {
 
 function isLocaleCode(value: string): value is LocaleCode {
   return localeOptions.some((option) => option.value === value);
+}
+
+function detectBrowserLocale(): LocaleCode {
+  const browserLanguages = navigator.languages.length > 0 ? navigator.languages : [navigator.language];
+
+  for (const language of browserLanguages) {
+    const normalized = language.toLowerCase();
+    const alias = localeAliases[normalized];
+    if (alias) {
+      return alias;
+    }
+
+    if (isLocaleCode(normalized)) {
+      return normalized;
+    }
+
+    const baseLanguage = normalized.split("-")[0];
+    if (isLocaleCode(baseLanguage)) {
+      return baseLanguage;
+    }
+  }
+
+  return "zh-CN";
 }
