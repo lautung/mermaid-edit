@@ -1234,3 +1234,36 @@ Prevented externally loaded Mermaid templates from entering the CodeMirror undo 
 ### Next Steps
 
 - None - task complete
+
+
+## Session 37: Add all templates filter
+
+**Date**: 2026-07-14
+**Task**: Add all templates filter
+**Branch**: `main`
+
+### Summary
+
+Added an all-templates filter button to the template sidebar, persisted it as type=all in URL state, localized the label, and verified tests, lint, build, and browser smoke checks.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `e093e87` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

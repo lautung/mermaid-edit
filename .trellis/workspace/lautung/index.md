@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 36
+- **Total Sessions**: 37
 - **Last Active**: 2026-07-14
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~1236 | Active |
+| `journal-1.md` | ~1269 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 37 | 2026-07-14 | Add all templates filter | `e093e87` | `main` |
 | 36 | 2026-07-14 | Fix editor undo after template load | `0b0293a` | `main` |
 | 35 | 2026-07-14 | Fix preview zoom slider marks | `feeab25` | `main` |
 | 35 | 2026-07-14 | Make preview tabs functional | `26ab654` | `main` |
