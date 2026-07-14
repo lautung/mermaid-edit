@@ -54,6 +54,7 @@ export type AppMessages = {
     libraryTitle: string;
     searchPlaceholder: string;
     chartTypes: string;
+    allTemplates: string;
     templateList: string;
     emptyTemplates: string;
     manageTemplates: string;

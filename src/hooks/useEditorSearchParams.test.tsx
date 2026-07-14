@@ -3,6 +3,7 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, test } from "vitest";
 import { MemoryRouter, useLocation } from "react-router";
+import { ALL_TEMPLATE_TYPE } from "../data/templateFilters";
 import { useEditorSearchParams } from "./useEditorSearchParams";
 
 const chartTypes = ["flowchart", "sequence", "class"];
@@ -34,11 +35,21 @@ describe("useEditorSearchParams", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByTestId("type").textContent).toBe("flowchart");
+    expect(screen.getByTestId("type").textContent).toBe(ALL_TEMPLATE_TYPE);
     expect(screen.getByTestId("tab").textContent).toBe("preview");
     expect(screen.getByTestId("zoom").textContent).toBe("100");
     expect(screen.getByTestId("scale").textContent).toBe("2");
     expect(screen.getByTestId("filename").textContent).toBe("mermaid-diagram");
+  });
+
+  test("keeps the all-templates filter in URL state", () => {
+    render(
+      <MemoryRouter initialEntries={["/?type=all"]}>
+        <SearchStateHarness />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByTestId("type").textContent).toBe(ALL_TEMPLATE_TYPE);
   });
 
   test("clamps out-of-range zoom values", () => {

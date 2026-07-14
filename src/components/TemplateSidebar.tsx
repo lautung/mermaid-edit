@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { PictureOutlined, SearchOutlined, SettingOutlined } from "@ant-design/icons";
 import { Button, Empty, Input, Space, Tag, Typography } from "antd";
 import type { DiagramTemplate } from "../data/examples";
+import { ALL_TEMPLATE_TYPE } from "../data/templateFilters";
 import type { TemplateText } from "../i18n/types";
 import { useI18n } from "../i18n/useI18n";
 
@@ -43,7 +44,7 @@ export function TemplateSidebar({
   const filteredTemplates = useMemo(
     () =>
       templates.filter((template) => {
-        const matchesType = template.typeKey === selectedType;
+        const matchesType = selectedType === ALL_TEMPLATE_TYPE || template.typeKey === selectedType;
         const keyword = search.trim().toLowerCase();
         const matchesSearch =
           !keyword ||
@@ -72,6 +73,14 @@ export function TemplateSidebar({
         {messages.sider.chartTypes}
       </Text>
       <div className="templateTypeGrid" role="group" aria-label={messages.sider.chartTypes}>
+        <button
+          type="button"
+          className={`templateTypeButton${selectedType === ALL_TEMPLATE_TYPE ? " templateTypeButtonActive" : ""}`}
+          aria-pressed={selectedType === ALL_TEMPLATE_TYPE}
+          onClick={() => onSelectedTypeChange(ALL_TEMPLATE_TYPE)}
+        >
+          {messages.sider.allTemplates}
+        </button>
         {chartTypes.map((type) => (
           <button
             key={type}

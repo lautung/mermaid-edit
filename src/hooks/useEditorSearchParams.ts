@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from "react";
 import { useSearchParams } from "react-router";
+import { ALL_TEMPLATE_TYPE } from "../data/templateFilters";
 import type { PreviewTab } from "../types";
 
 const DEFAULT_ZOOM = 100;
@@ -35,7 +36,7 @@ export type EditorSearchState = {
 
 export function useEditorSearchParams({ chartTypes }: SearchParamOptions): EditorSearchState {
   const [searchParams, setSearchParams] = useSearchParams();
-  const fallbackType = chartTypes[0] ?? "";
+  const fallbackType = ALL_TEMPLATE_TYPE;
 
   const selectedType = normalizeType(searchParams.get("type"), chartTypes, fallbackType);
   const search = searchParams.get("q") ?? "";
@@ -102,6 +103,10 @@ export function useEditorSearchParams({ chartTypes }: SearchParamOptions): Edito
 }
 
 function normalizeType(value: string | null, chartTypes: string[], fallbackType: string) {
+  if (value === ALL_TEMPLATE_TYPE) {
+    return ALL_TEMPLATE_TYPE;
+  }
+
   return value && chartTypes.includes(value) ? value : fallbackType;
 }
 
