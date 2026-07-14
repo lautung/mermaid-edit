@@ -1267,3 +1267,36 @@ Added an all-templates filter button to the template sidebar, persisted it as ty
 ### Next Steps
 
 - None - task complete
+
+
+## Session 38: Fix template selection filter state
+
+**Date**: 2026-07-14
+**Task**: Fix template selection filter state
+**Branch**: `main`
+
+### Summary
+
+Fixed template loading so selecting a template no longer changes the template type filter. Added a regression test for keeping the all-templates filter active after loading the class template. Verified npm test -- --run, npm run lint, and npm run build before commit.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `b297e5e` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
