@@ -137,7 +137,6 @@ function MermaidEditorApp() {
     }
 
     setSource(template.source);
-    setSelectedType(template.typeKey);
     message.success(messages.feedback.templateLoaded(templateText(template.id, template).title));
   };
 

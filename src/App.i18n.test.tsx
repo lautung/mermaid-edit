@@ -153,6 +153,18 @@ describe("App internationalization", () => {
     expect(screen.getByText("导出倍率：3x")).not.toBeNull();
   });
 
+  test("keeps the template type filter unchanged when loading a template", async () => {
+    renderApp(["/?type=all"]);
+
+    expect(await screen.findByRole("heading", { name: "Mermaid 在线编辑器" })).not.toBeNull();
+
+    fireEvent.click(screen.getByRole("button", { name: /类图 - 服务结构/ }));
+
+    expect(screen.getByRole("button", { name: "全部模板" }).getAttribute("aria-pressed")).toBe("true");
+    expect(screen.getByRole("button", { name: "类图" }).getAttribute("aria-pressed")).toBe("false");
+    expect((await screen.findAllByText("类图 - 服务结构 已载入")).length).toBeGreaterThan(0);
+  });
+
   test.each([
     ["ja", "図の設定", "テーマ", "プレビュー倍率 100%", "レンダリング完了"],
     ["ko", "다이어그램 설정", "테마", "미리보기 확대 100%", "렌더링 완료"],
