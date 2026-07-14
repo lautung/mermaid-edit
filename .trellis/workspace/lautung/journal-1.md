@@ -1168,3 +1168,36 @@ Converted preview, export check, and error tabs into distinct functional panels 
 ### Next Steps
 
 - None - task complete
+
+
+## Session 35: Fix preview zoom slider marks
+
+**Date**: 2026-07-14
+**Task**: Fix preview zoom slider marks
+**Branch**: `main`
+
+### Summary
+
+Corrected the preview zoom slider to use the real 50-200 percent range and added a 150 percent mark with matching test coverage.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `feeab25` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

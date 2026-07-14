@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 34
+- **Total Sessions**: 35
 - **Last Active**: 2026-07-14
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~1137 | Active |
+| `journal-1.md` | ~1203 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 35 | 2026-07-14 | Fix preview zoom slider marks | `feeab25` | `main` |
 | 35 | 2026-07-14 | Make preview tabs functional | `26ab654` | `main` |
 | 34 | 2026-07-14 | 修复预览缩放控件居中 | `2dbd6af` | `main` |
 | 33 | 2026-07-14 | Fix Vite chunk warning | `0ed25db` | `main` |
