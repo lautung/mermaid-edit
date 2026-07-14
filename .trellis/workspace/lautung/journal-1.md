@@ -1201,3 +1201,36 @@ Corrected the preview zoom slider to use the real 50-200 percent range and added
 ### Next Steps
 
 - None - task complete
+
+
+## Session 36: Fix editor undo after template load
+
+**Date**: 2026-07-14
+**Task**: Fix editor undo after template load
+**Branch**: `main`
+
+### Summary
+
+Prevented externally loaded Mermaid templates from entering the CodeMirror undo history; added a regression test and verified full tests, lint, build, and browser Ctrl+Z behavior.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `0b0293a` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
