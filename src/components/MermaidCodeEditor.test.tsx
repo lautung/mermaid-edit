@@ -2,6 +2,7 @@
 
 import { act, cleanup, render } from "@testing-library/react";
 import { createRef } from "react";
+import { undo } from "@codemirror/commands";
 import { EditorView } from "@codemirror/view";
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { MermaidCodeEditor } from "./MermaidCodeEditor";
@@ -58,6 +59,29 @@ describe("MermaidCodeEditor", () => {
 
     const view = EditorView.findFromDOM(container.querySelector(".cm-editor") as HTMLElement);
     expect(view?.state.doc.toString()).toBe(nextSource);
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  test("keeps externally loaded templates out of the editor undo history", () => {
+    const source = "flowchart LR\n  A --> B";
+    const templateSource = "gantt\n  title Release plan";
+    const onChange = vi.fn();
+    const { container, rerender } = render(
+      <MermaidCodeEditor value={source} onChange={onChange} />,
+    );
+
+    rerender(<MermaidCodeEditor value={templateSource} onChange={onChange} />);
+
+    const view = EditorView.findFromDOM(container.querySelector(".cm-editor") as HTMLElement);
+    expect(view?.state.doc.toString()).toBe(templateSource);
+
+    act(() => {
+      if (view) {
+        undo(view);
+      }
+    });
+
+    expect(view?.state.doc.toString()).toBe(templateSource);
     expect(onChange).not.toHaveBeenCalled();
   });
 

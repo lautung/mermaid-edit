@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { basicSetup } from "codemirror";
 import { indentWithTab } from "@codemirror/commands";
-import { Annotation, EditorState } from "@codemirror/state";
+import { Annotation, EditorState, Transaction } from "@codemirror/state";
 import { EditorView, keymap } from "@codemirror/view";
 
 type MermaidCodeEditorProps = {
@@ -115,7 +115,7 @@ export const MermaidCodeEditor = forwardRef<MermaidCodeEditorHandle, MermaidCode
 
     view.dispatch({
       changes: { from: 0, to: view.state.doc.length, insert: value },
-      annotations: externalUpdate.of(true),
+      annotations: [externalUpdate.of(true), Transaction.addToHistory.of(false)],
     });
   }, [value]);
 
