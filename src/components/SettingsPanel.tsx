@@ -28,22 +28,10 @@ const MAX_ZOOM = 200;
 const ZOOM_STEP = 10;
 
 const ZOOM_MARKS = {
-  0: "50%",
-  10: "",
-  20: "",
-  30: "",
-  40: "",
-  50: "100%",
-  55: "",
-  60: "",
-  65: "",
-  70: "",
-  75: "",
-  80: "",
-  85: "",
-  90: "",
-  95: "",
-  100: "200%",
+  [MIN_ZOOM]: "50%",
+  [DEFAULT_ZOOM]: "100%",
+  150: "150%",
+  [MAX_ZOOM]: "200%",
 };
 
 export function SettingsPanel({
@@ -177,12 +165,12 @@ export function SettingsPanel({
             <Button onClick={() => onZoomChange(Math.min(MAX_ZOOM, zoom + ZOOM_STEP))}>+</Button>
           </div>
           <Slider
-            min={0}
-            max={100}
-            step={null}
+            min={MIN_ZOOM}
+            max={MAX_ZOOM}
+            step={ZOOM_STEP}
             marks={ZOOM_MARKS}
-            value={zoomToSliderValue(zoom)}
-            onChange={(value) => onZoomChange(sliderValueToZoom(value))}
+            value={zoom}
+            onChange={onZoomChange}
           />
         </div>
 
@@ -218,21 +206,4 @@ function SettingsField({
 
 function getOverriddenKeys(source: string) {
   return new Set(getFrontmatterOverrides(source).overriddenKeys);
-}
-
-function zoomToSliderValue(zoom: number) {
-  if (zoom <= DEFAULT_ZOOM) {
-    return ((zoom - MIN_ZOOM) / (DEFAULT_ZOOM - MIN_ZOOM)) * 50;
-  }
-
-  return 50 + ((zoom - DEFAULT_ZOOM) / (MAX_ZOOM - DEFAULT_ZOOM)) * 50;
-}
-
-function sliderValueToZoom(value: number) {
-  const zoom =
-    value <= 50
-      ? MIN_ZOOM + (value / 50) * (DEFAULT_ZOOM - MIN_ZOOM)
-      : DEFAULT_ZOOM + ((value - 50) / 50) * (MAX_ZOOM - DEFAULT_ZOOM);
-
-  return Math.round(zoom / ZOOM_STEP) * ZOOM_STEP;
 }

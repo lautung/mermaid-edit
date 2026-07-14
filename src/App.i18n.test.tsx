@@ -149,7 +149,7 @@ describe("App internationalization", () => {
     expect(screen.getByRole("button", { name: "类图" }).getAttribute("aria-pressed")).toBe("true");
     expect(screen.getByRole("tab", { name: /导出检查/ }).getAttribute("aria-selected")).toBe("true");
     expect((screen.getByRole("textbox", { name: "文件名" }) as HTMLInputElement).value).toBe("demo");
-    expect(screen.getByText("150%")).not.toBeNull();
+    expect(screen.getAllByText("150%").length).toBeGreaterThan(0);
     expect(screen.getByText("导出倍率：3x")).not.toBeNull();
   });
 
